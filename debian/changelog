@@ -1,0 +1,5 @@
+wazo-auth-cli (1.0.0) wazo-dev; urgency=medium
+
+  * Initial release.
+
+ -- Wazo Maintainers <dev+pkg@wazo.community>  Sat, 09 Dec 2017 16:27:43 -0500
