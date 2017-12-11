@@ -11,6 +11,7 @@ Architecture: all
 Depends:
  ${python3:Depends},
  ${misc:Depends},
+ python3-cliff
 Description: A CLI for the wazo-auth service
  Wazo is a system based on a powerful IPBX, to bring an easy to
  install solution for telephony and related services.
