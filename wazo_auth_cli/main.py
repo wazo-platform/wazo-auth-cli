@@ -7,6 +7,9 @@ from cliff.app import App
 from cliff.commandmanager import CommandManager
 from xivo_auth_client import Client
 
+import logging
+logging.getLogger('requests').setLevel(logging.ERROR)
+
 
 class WazoAuthCLI(App):
 
