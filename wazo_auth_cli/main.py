@@ -32,7 +32,8 @@ class UserCreate(Command):
 
         user = self.app.client.users.new(**body)
         data = json.dumps(user)
-        self.app.stdout.write(data + '\n')
+        self.app.LOG.info(data)
+        self.app.stdout.write(user['uuid'] + '\n')
 
 
 class WazoAuthCLI(App):
@@ -97,16 +98,12 @@ class WazoAuthCLI(App):
         self.client.set_token(self._auth_token)
 
     def clean_up(self, cmd, result, err):
-        self.LOG.debug('cleanup %s', cmd.__class__.__name__)
-        self.LOG.debug('result %s', result)
         if err:
             self.LOG.debug('got an error: %s', err)
 
         if self._remove_token:
             self.client.token.revoke(self._current_token)
             self._remove_token = False
-
-        return result
 
 
 def main(argv=sys.argv[1:]):
