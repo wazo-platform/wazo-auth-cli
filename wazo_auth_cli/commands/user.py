@@ -1,8 +1,6 @@
 # Copyright 2017 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
-import json
-
 from cliff.command import Command
 
 
@@ -24,6 +22,5 @@ class UserCreate(Command):
         self.app.LOG.debug('Creating user %s', body)
 
         user = self.app.client.users.new(**body)
-        data = json.dumps(user)
-        self.app.LOG.info(data)
+        self.app.LOG.info(user)
         self.app.stdout.write(user['uuid'] + '\n')
