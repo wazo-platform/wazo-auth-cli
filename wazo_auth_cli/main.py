@@ -10,6 +10,8 @@ from xivo_auth_client import Client
 
 class WazoAuthCLI(App):
 
+    DEFAULT_VERBOSE_LEVEL = 0
+
     def __init__(self):
         super().__init__(
             description='A CLI for the wazo-auth service',
