@@ -3,6 +3,7 @@
 
 import logging
 import sys
+import json
 
 from cliff.app import App
 from cliff.commandmanager import CommandManager
@@ -14,8 +15,24 @@ logger = logging.getLogger(__name__)
 
 class UserCreate(Command):
 
+    def get_parser(self, prog_name):
+        parser = super(UserCreate, self).get_parser(prog_name)
+        parser.add_argument('--passwd', help="The user's password", action='store')
+        parser.add_argument('--email', help="The user's main email address", required=True)
+        parser.add_argument('name', help="The user's username")
+        return parser
+
     def take_action(self, parsed_args):
-        logger.info('Creating user...')
+        body = dict(
+            username=parsed_args.name,
+            email_address=parsed_args.email,
+            password=parsed_args.passwd,
+        )
+        self.app.LOG.debug('Creating user %s', body)
+
+        user = self.app.client.users.new(**body)
+        data = json.dumps(user)
+        self.app.stdout.write(data + '\n')
 
 
 class WazoAuthCLI(App):
