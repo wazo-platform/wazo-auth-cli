@@ -31,8 +31,10 @@ class WazoAuthCLI(App):
         auth_or_token.add_argument('--token', help='The wazo-auth token to use')
 
         username_password = auth_or_token.add_argument_group()
-        username_password.add_argument('--username', help='The username to use to retrieve a token')
-        username_password.add_argument('--password', help='The password to use to retrieve a token')
+        username_password.add_argument('--auth-username', metavar='auth_username',
+                                       help='The username to use to retrieve a token')
+        username_password.add_argument('--auth-password', metavar='auth_password',
+                                       help='The password to use to retrieve a token')
         username_password.add_argument('--backend', help='The backend to use when authenticating')
 
         return parser
@@ -43,10 +45,10 @@ class WazoAuthCLI(App):
         client_kwargs = {
             'host': self.options.hostname,
         }
-        if self.options.username:
-            client_kwargs['username'] = self.options.username
-        if self.options.password:
-            client_kwargs['password'] = self.options.password
+        if self.options.auth_username:
+            client_kwargs['username'] = self.options.auth_username
+        if self.options.auth_password:
+            client_kwargs['password'] = self.options.auth_password
         if self.options.port:
             client_kwargs['port'] = self.options.port
         if self.options.verify:
@@ -64,7 +66,7 @@ class WazoAuthCLI(App):
             self._auth_token = self.options.token
         else:
             self.LOG.debug('Creating a token for "%s:%s" on backend "%s"',
-                           self.options.username, self.options.password, self.options.backend)
+                           self.options.auth_username, self.options.auth_password, self.options.backend)
             token_data = self.client.token.new(self.options.backend, expiration=3600)
             self._auth_token = token_data['token']
             self._remove_token = True
