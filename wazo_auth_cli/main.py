@@ -25,7 +25,13 @@ class WazoAuthCLI(App):
         parser = super(WazoAuthCLI, self).build_option_parser(*args, **kwargs)
         parser.add_argument('--hostname', help='The wazo-auth hostname')
         parser.add_argument('--port', help='The wazo-auth port')
-        parser.add_argument('--verify', help='Verify the HTTPS certificate or not')
+
+        https_verification = parser.add_mutually_exclusive_group()
+        https_verification.add_argument('--verify', action='store_true',
+                                        help='Verify the HTTPS certificate or not')
+        https_verification.add_argument('--insecure', action='store_true',
+                                        help='Bypass certificate verification')
+        https_verification.add_argument('--cacert', help='Specify the ca bundle file')
 
         auth_or_token = parser.add_mutually_exclusive_group()
         auth_or_token.add_argument('--token', help='The wazo-auth token to use')
@@ -51,13 +57,13 @@ class WazoAuthCLI(App):
             client_kwargs['password'] = self.options.auth_password
         if self.options.port:
             client_kwargs['port'] = self.options.port
+
         if self.options.verify:
-            if self.options.verify in ('true', 'True'):
-                client_kwargs['verify_certificate'] = True
-            elif self.options.verify in ('false', 'False'):
-                client_kwargs['verify_certificate'] = False
-            else:
-                client_kwargs['verify_certificate'] = self.options.verify
+            client_kwargs['verify_certificate'] = True
+        elif self.options.insecure:
+            client_kwargs['verify_certificate'] = False
+        elif self.options.cacert:
+            client_kwargs['verify_certificate'] = self.options.cacert
 
         self.LOG.debug('client args: %s', client_kwargs)
         self.client = Client(**client_kwargs)
