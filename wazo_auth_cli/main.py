@@ -28,7 +28,7 @@ class WazoAuthCLI(App):
         auth_or_token = parser.add_mutually_exclusive_group()
         auth_or_token.add_argument('--token', help='The wazo-auth token to use')
 
-        username_password = parser.add_argument_group()
+        username_password = auth_or_token.add_argument_group()
         username_password.add_argument('--username', help='The username to use to retrieve a token')
         username_password.add_argument('--password', help='The password to use to retrieve a token')
         username_password.add_argument('--backend', help='The backend to use when authenticating')
