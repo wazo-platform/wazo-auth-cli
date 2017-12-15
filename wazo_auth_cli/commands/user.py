@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0+
 
 from cliff.command import Command
+from cliff.lister import Lister
 
 
 class UserCreate(Command):
@@ -25,3 +26,17 @@ class UserCreate(Command):
         user = self.app.client.users.new(**body)
         self.app.LOG.info(user)
         self.app.stdout.write(user['uuid'] + '\n')
+
+
+class UserList(Lister):
+
+    def take_action(self, parsed_args):
+        result = self.app.client.users.list()
+        if result['items']:
+            headers = result['items'][0]
+            users = []
+            for u in result['items']:
+                user = [u[h] for h in headers]
+                users.append(user)
+            return headers, users
+        return (), ()
