@@ -18,7 +18,7 @@ setup(
             'wazo-auth-cli = wazo_auth_cli.main:main',
         ],
         'wazo_auth_cli.commands': [
-            'user_create = wazo_auth_cli.main:UserCreate',
+            'user_create = wazo_auth_cli.commands.user:UserCreate',
         ],
     },
 )
