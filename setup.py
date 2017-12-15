@@ -19,6 +19,7 @@ setup(
         ],
         'wazo_auth_cli.commands': [
             'user_create = wazo_auth_cli.commands.user:UserCreate',
+            'token_create = wazo_auth_cli.commands.token:TokenCreate',
         ],
     },
 )
