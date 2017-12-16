@@ -6,6 +6,7 @@ import sys
 from cliff.app import App
 from cliff.commandmanager import CommandManager
 from xivo_auth_client import Client
+from . import config
 
 import logging
 logging.getLogger('requests').setLevel(logging.ERROR)
@@ -51,31 +52,15 @@ class WazoAuthCLI(App):
     def initialize_app(self, argv):
         self.LOG.debug('Wazo Auth CLI')
         self.LOG.debug('options=%s', self.options)
-        client_kwargs = {
-            'host': self.options.hostname,
-        }
-        if self.options.auth_username:
-            client_kwargs['username'] = self.options.auth_username
-        if self.options.auth_password:
-            client_kwargs['password'] = self.options.auth_password
-        if self.options.port:
-            client_kwargs['port'] = self.options.port
+        conf = config.build(self.options)
+        self.LOG.debug('Starting with config: %s', conf)
 
-        if self.options.verify:
-            client_kwargs['verify_certificate'] = True
-        elif self.options.insecure:
-            client_kwargs['verify_certificate'] = False
-        elif self.options.cacert:
-            client_kwargs['verify_certificate'] = self.options.cacert
-
-        self.LOG.debug('client args: %s', client_kwargs)
-        self.client = Client(**client_kwargs)
+        self.LOG.debug('client args: %s', conf['auth'])
+        self.client = Client(**conf['auth'])
 
         if self.options.token:
             self._auth_token = self.options.token
         else:
-            self.LOG.debug('Creating a token for "%s:%s" on backend "%s"',
-                           self.options.auth_username, self.options.auth_password, self.options.backend)
             token_data = self.client.token.new(self.options.backend, expiration=3600)
             self._auth_token = token_data['token']
             self._remove_token = True

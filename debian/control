@@ -12,7 +12,8 @@ Depends:
  ${python3:Depends},
  ${misc:Depends},
  python3-cliff,
- xivo-auth-client-python3
+ xivo-auth-client-python3,
+ xivo-lib-python-python3
 Description: A CLI for the wazo-auth service
  Wazo is a system based on a powerful IPBX, to bring an easy to
  install solution for telephony and related services.
