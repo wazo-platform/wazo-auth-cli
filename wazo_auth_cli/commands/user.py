@@ -28,6 +28,18 @@ class UserCreate(Command):
         self.app.stdout.write(user['uuid'] + '\n')
 
 
+class UserDelete(Command):
+
+    def get_parser(self, *args, **kwargs):
+        parser = super().get_parser(*args, **kwargs)
+        parser.add_argument('uuid', help="The UUID of the user to delete")
+        return parser
+
+    def take_action(self, parsed_args):
+        self.app.LOG.debug('Deleting user %s', parsed_args.uuid)
+        self.app.client.users.delete(parsed_args.uuid)
+
+
 class UserList(Lister):
 
     def take_action(self, parsed_args):
