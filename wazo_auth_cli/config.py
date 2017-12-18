@@ -4,7 +4,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 from xivo.chain_map import ChainMap
-from xivo.config_helper import read_config_file_hierarchy
+from xivo.config_helper import parse_config_dir, read_config_file_hierarchy
 
 
 _APP_NAME = 'wazo-auth-cli'
@@ -47,8 +47,16 @@ def _args_to_dict(parsed_args):
     return config
 
 
+def _read_user_config(parsed_args):
+    if not parsed_args.config:
+        return {}
+    configs = parse_config_dir(parsed_args.config)
+    return ChainMap(*configs)
+
+
 def build(parsed_args):
     cli_config = _args_to_dict(parsed_args)
-    system_file_config = read_config_file_hierarchy(ChainMap(cli_config, _DEFAULT_CONFIG))
-    final_config = ChainMap(cli_config, system_file_config, _DEFAULT_CONFIG)
+    user_file_config = _read_user_config(parsed_args)
+    system_file_config = read_config_file_hierarchy(ChainMap(cli_config, user_file_config, _DEFAULT_CONFIG))
+    final_config = ChainMap(cli_config, user_file_config, system_file_config, _DEFAULT_CONFIG)
     return final_config

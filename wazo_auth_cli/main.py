@@ -27,6 +27,8 @@ class WazoAuthCLI(App):
 
     def build_option_parser(self, *args, **kwargs):
         parser = super(WazoAuthCLI, self).build_option_parser(*args, **kwargs)
+        parser.add_argument('--config',
+                            help='Extra configuration directory to override the system configuration')
         parser.add_argument('--hostname', help='The wazo-auth hostname')
         parser.add_argument('--port', help='The wazo-auth port')
 
