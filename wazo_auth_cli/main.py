@@ -58,12 +58,14 @@ class WazoAuthCLI(App):
         self.LOG.debug('Starting with config: %s', conf)
 
         self.LOG.debug('client args: %s', conf['auth'])
-        self.client = Client(**conf['auth'])
+        auth_config = dict(conf['auth'])
+        backend = auth_config.pop('backend', None)
+        self.client = Client(**auth_config)
 
         if self.options.token:
             self._auth_token = self.options.token
         else:
-            token_data = self.client.token.new(self.options.backend, expiration=3600)
+            token_data = self.client.token.new(backend, expiration=3600)
             self._auth_token = token_data['token']
             self._remove_token = True
 
