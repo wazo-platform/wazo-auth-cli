@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0+
 
 import sys
+import os
 
 from cliff.app import App
 from cliff.commandmanager import CommandManager
@@ -27,7 +28,7 @@ class WazoAuthCLI(App):
 
     def build_option_parser(self, *args, **kwargs):
         parser = super(WazoAuthCLI, self).build_option_parser(*args, **kwargs)
-        parser.add_argument('--config',
+        parser.add_argument('--config', default=os.getenv('WAZO_AUTH_CLI_CONFIG', None),
                             help='Extra configuration directory to override the system configuration')
         parser.add_argument('--hostname', help='The wazo-auth hostname')
         parser.add_argument('--port', help='The wazo-auth port')
