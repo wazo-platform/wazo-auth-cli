@@ -4,6 +4,8 @@
 from cliff.command import Command
 from cliff.lister import Lister
 
+from ..helpers import ListBuildingMixin
+
 
 class PolicyCreate(Command):
 
@@ -24,23 +26,10 @@ class PolicyCreate(Command):
         self.app.stdout.write(policy['uuid'] + '\n')
 
 
-class PolicyList(Lister):
+class PolicyList(ListBuildingMixin, Lister):
 
     _columns = ['uuid', 'name', 'description']
     _removed_columns = ['acl_templates']
-
-    def extract_column_headers(self, item):
-        headers = item.keys()
-        missing_columns = set(headers) - set(self._columns) - set(self._removed_columns)
-        columns = self._columns + list(missing_columns)
-        return columns
-
-    def extract_items(self, headers, items):
-        results = []
-        for item in items:
-            result = [item[header] for header in headers]
-            results.append(result)
-        return results
 
     def take_action(self, parsed_args):
         result = self.app.client.policies.list()
