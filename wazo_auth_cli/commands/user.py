@@ -4,6 +4,8 @@
 from cliff.command import Command
 from cliff.lister import Lister
 
+from ..helpers import ListBuildingMixin
+
 
 class UserCreate(Command):
 
@@ -40,15 +42,26 @@ class UserDelete(Command):
         self.app.client.users.delete(parsed_args.uuid)
 
 
-class UserList(Lister):
+class UserList(ListBuildingMixin, Lister):
+
+    _columns = ['uuid', 'username', 'email']
+    _removed_columns = ['emails']
 
     def take_action(self, parsed_args):
         result = self.app.client.users.list()
-        if result['items']:
-            headers = result['items'][0]
-            users = []
-            for u in result['items']:
-                user = [u[h] for h in headers]
-                users.append(user)
-            return headers, users
-        return (), ()
+        if not result['items']:
+            return (), ()
+
+        raw_items = self._add_email_column(result['items'])
+        headers = self.extract_column_headers(raw_items[0])
+        items = self.extract_items(headers, raw_items)
+        return headers, items
+
+    def _add_email_column(self, items):
+        for item in items:
+            for email in item['emails']:
+                if not email['main']:
+                    continue
+                item['email'] = email['address']
+                break
+        return items
