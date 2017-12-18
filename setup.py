@@ -19,6 +19,7 @@ setup(
         ],
         'wazo_auth_cli.commands': [
             'policy_create = wazo_auth_cli.commands.policy:PolicyCreate',
+            'policy_list = wazo_auth_cli.commands.policy:PolicyList',
             'user_create = wazo_auth_cli.commands.user:UserCreate',
             'user_delete = wazo_auth_cli.commands.user:UserDelete',
             'user_list = wazo_auth_cli.commands.user:UserList',

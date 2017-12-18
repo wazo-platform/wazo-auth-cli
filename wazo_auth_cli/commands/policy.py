@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0+
 
 from cliff.command import Command
+from cliff.lister import Lister
 
 
 class PolicyCreate(Command):
@@ -21,3 +22,31 @@ class PolicyCreate(Command):
             parsed_args.name, parsed_args.description, parsed_args.acl)
         self.app.LOG.info(policy)
         self.app.stdout.write(policy['uuid'] + '\n')
+
+
+class PolicyList(Lister):
+
+    _columns = ['uuid', 'name', 'description']
+    _removed_columns = ['acl_templates']
+
+    def extract_column_headers(self, item):
+        headers = item.keys()
+        missing_columns = set(headers) - set(self._columns) - set(self._removed_columns)
+        columns = self._columns + list(missing_columns)
+        return columns
+
+    def extract_items(self, headers, items):
+        results = []
+        for item in items:
+            result = [item[header] for header in headers]
+            results.append(result)
+        return results
+
+    def take_action(self, parsed_args):
+        result = self.app.client.policies.list()
+        if not result['items']:
+            return (), ()
+
+        headers = self.extract_column_headers(result['items'][0])
+        items = self.extract_items(headers, result['items'])
+        return headers, items
