@@ -1,10 +1,12 @@
 # Copyright 2017 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
+import json
+
 from cliff.command import Command
 from cliff.lister import Lister
 
-from ..helpers import ListBuildingMixin
+from ..helpers import is_uuid, ListBuildingMixin
 
 
 class PolicyCreate(Command):
@@ -39,3 +41,32 @@ class PolicyList(ListBuildingMixin, Lister):
         headers = self.extract_column_headers(result['items'][0])
         items = self.extract_items(headers, result['items'])
         return headers, items
+
+
+class PolicyShow(Command):
+
+    def get_parser(self, *args, **kwargs):
+        parser = super().get_parser(*args, **kwargs)
+        parser.add_argument('identifier', help='name or UUID')
+        return parser
+
+    def take_action(self, parsed_args):
+        uuid = self._get_user_uuid(parsed_args.identifier)
+        policy = self.app.client.policies.get(uuid)
+        self.app.stdout.write(json.dumps(policy, indent=True, sort_keys=True) + '\n')
+
+    def _get_user_uuid(self, identifier):
+        if is_uuid(identifier):
+            return identifier
+
+        # TODO: update to use name=identifier once the client implements it and remove the loop
+        result = self.app.client.policies.list(search=identifier)
+        if not result['items']:
+            raise Exception('Unknown policy "{}"'.format(identifier))
+
+        for item in result['items']:
+            if item['name'] != identifier:
+                continue
+            return item['uuid']
+
+        raise Exception('Unknown policy "{}"'.format(identifier))
