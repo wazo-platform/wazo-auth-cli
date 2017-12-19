@@ -100,4 +100,5 @@ class UserShow(UserIdentifierMixin, Command):
     def take_action(self, parsed_args):
         uuid = self.get_user_uuid(self.app.client, parsed_args.identifier)
         user = self.app.client.users.get(uuid)
+        user['policies'] = self.app.client.users.get_policies(uuid)['items']
         self.app.stdout.write(json.dumps(user, indent=True, sort_keys=True) + '\n')
