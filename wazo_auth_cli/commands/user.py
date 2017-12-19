@@ -6,7 +6,7 @@ import json
 from cliff.command import Command
 from cliff.lister import Lister
 
-from ..helpers import is_uuid, ListBuildingMixin
+from ..helpers import ListBuildingMixin, UserIdentifierMixin
 
 
 class UserCreate(Command):
@@ -69,7 +69,7 @@ class UserList(ListBuildingMixin, Lister):
         return items
 
 
-class UserShow(Command):
+class UserShow(UserIdentifierMixin, Command):
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
@@ -77,16 +77,6 @@ class UserShow(Command):
         return parser
 
     def take_action(self, parsed_args):
-        uuid = self._get_user_uuid(parsed_args.identifier)
+        uuid = self.get_user_uuid(self.app.client, parsed_args.identifier)
         user = self.app.client.users.get(uuid)
         self.app.stdout.write(json.dumps(user, indent=True, sort_keys=True) + '\n')
-
-    def _get_user_uuid(self, identifier):
-        if is_uuid(identifier):
-            return identifier
-
-        result = self.app.client.users.list(username=identifier)
-        if not result['items']:
-            raise Exception('Unknown user "{}"'.format(identifier))
-
-        return result['items'][0]['uuid']

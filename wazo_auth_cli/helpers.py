@@ -30,3 +30,16 @@ class ListBuildingMixin(object):
             result = [item[header] for header in headers]
             results.append(result)
         return results
+
+
+class UserIdentifierMixin(object):
+
+    def get_user_uuid(self, client, identifier):
+        if is_uuid(identifier):
+            return identifier
+
+        result = client.users.list(username=identifier)
+        if not result['items']:
+            raise Exception('Unknown user "{}"'.format(identifier))
+
+        return result['items'][0]['uuid']
