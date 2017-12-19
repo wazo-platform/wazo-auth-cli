@@ -6,7 +6,7 @@ import json
 from cliff.command import Command
 from cliff.lister import Lister
 
-from ..helpers import is_uuid, ListBuildingMixin
+from ..helpers import ListBuildingMixin, PolicyIdentifierMixin
 
 
 class PolicyCreate(Command):
@@ -43,7 +43,7 @@ class PolicyList(ListBuildingMixin, Lister):
         return headers, items
 
 
-class PolicyShow(Command):
+class PolicyShow(PolicyIdentifierMixin, Command):
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
@@ -51,22 +51,6 @@ class PolicyShow(Command):
         return parser
 
     def take_action(self, parsed_args):
-        uuid = self._get_user_uuid(parsed_args.identifier)
+        uuid = self.get_policy_uuid(self.app.client, parsed_args.identifier)
         policy = self.app.client.policies.get(uuid)
         self.app.stdout.write(json.dumps(policy, indent=True, sort_keys=True) + '\n')
-
-    def _get_user_uuid(self, identifier):
-        if is_uuid(identifier):
-            return identifier
-
-        # TODO: update to use name=identifier once the client implements it and remove the loop
-        result = self.app.client.policies.list(search=identifier)
-        if not result['items']:
-            raise Exception('Unknown policy "{}"'.format(identifier))
-
-        for item in result['items']:
-            if item['name'] != identifier:
-                continue
-            return item['uuid']
-
-        raise Exception('Unknown policy "{}"'.format(identifier))
