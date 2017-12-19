@@ -1,6 +1,17 @@
 # Copyright 2017 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
+from uuid import UUID
+
+
+def is_uuid(string):
+    try:
+        UUID(string)
+    except Exception:
+        return False
+
+    return True
+
 
 class ListBuildingMixin(object):
 

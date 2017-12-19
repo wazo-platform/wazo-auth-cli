@@ -1,10 +1,12 @@
 # Copyright 2017 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
+import json
+
 from cliff.command import Command
 from cliff.lister import Lister
 
-from ..helpers import ListBuildingMixin
+from ..helpers import is_uuid, ListBuildingMixin
 
 
 class UserCreate(Command):
@@ -65,3 +67,26 @@ class UserList(ListBuildingMixin, Lister):
                 item['email'] = email['address']
                 break
         return items
+
+
+class UserShow(Command):
+
+    def get_parser(self, *args, **kwargs):
+        parser = super().get_parser(*args, **kwargs)
+        parser.add_argument('identifier', help='username or UUID')
+        return parser
+
+    def take_action(self, parsed_args):
+        uuid = self._get_user_uuid(parsed_args.identifier)
+        user = self.app.client.users.get(uuid)
+        self.app.stdout.write(json.dumps(user, indent=True, sort_keys=True) + '\n')
+
+    def _get_user_uuid(self, identifier):
+        if is_uuid(identifier):
+            return identifier
+
+        result = self.app.client.users.list(username=identifier)
+        if not result['items']:
+            raise Exception('Unknown user "{}"'.format(identifier))
+
+        return result['items'][0]['uuid']
