@@ -6,7 +6,28 @@ import json
 from cliff.command import Command
 from cliff.lister import Lister
 
-from ..helpers import ListBuildingMixin, UserIdentifierMixin
+from ..helpers import ListBuildingMixin, PolicyIdentifierMixin, UserIdentifierMixin
+
+
+class UserAdd(UserIdentifierMixin, PolicyIdentifierMixin, Command):
+
+    def get_parser(self, *args, **kwargs):
+        parser = super().get_parser(*args, **kwargs)
+        relation = parser.add_mutually_exclusive_group(required=True)
+        relation.add_argument('--policy',
+                              help='The name or UUID of the policy to add to this user')
+        parser.add_argument('identifier', help='username or UUID')
+        return parser
+
+    def take_action(self, parsed_args):
+        uuid = self.get_user_uuid(self.app.client, parsed_args.identifier)
+
+        if parsed_args.policy:
+            return self._add_policy(uuid, parsed_args)
+
+    def _add_policy(self, uuid, parsed_args):
+        policy_uuid = self.get_policy_uuid(self.app.client, parsed_args.policy)
+        self.app.client.users.add_policy(uuid, policy_uuid)
 
 
 class UserCreate(Command):
