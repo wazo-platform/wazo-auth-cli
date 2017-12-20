@@ -6,7 +6,7 @@ COMPLETION_SCRIPT="/etc/bash_completion.d/wazo-auth-cli"
 
 case "$1" in
     configure)
-        wazo-auth-cli --token no-token complete > "${COMPLETION_SCRIPT}"
+        wazo-auth-cli --insecure --token no-token complete > "${COMPLETION_SCRIPT}"
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
