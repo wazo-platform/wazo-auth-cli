@@ -1,0 +1,20 @@
+Source: wazo-auth-cli
+Section: python
+Priority: extra
+Maintainer: Wazo Maintainers <dev+pkg@wazo.community>
+Build-Depends: debhelper (>= 9), dh-python, python3-all, python3-setuptools
+Standards-Version: 3.9.6
+X-Python3-Version: >= 3.4
+
+Package: wazo-auth-cli
+Architecture: all
+Depends:
+ ${python3:Depends},
+ ${misc:Depends},
+ python3-cliff,
+ xivo-auth-client-python3,
+ xivo-lib-python-python3
+Description: A CLI for the wazo-auth service
+ Wazo is a system based on a powerful IPBX, to bring an easy to
+ install solution for telephony and related services.
+ .
