@@ -25,6 +25,7 @@ _AUTH_ARGS_TO_FIELDS_MAP = dict(
     hostname='host',
     auth_password='password',
     port='port',
+    backend='backend',
 )
 
 
