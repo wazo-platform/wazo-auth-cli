@@ -1,11 +1,12 @@
 # Copyright 2017 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
+
 import logging
-logger = logging.getLogger(__name__)
 
 from xivo.chain_map import ChainMap
 from xivo.config_helper import parse_config_dir, read_config_file_hierarchy
 
+logger = logging.getLogger(__name__)
 
 _APP_NAME = 'wazo-auth-cli'
 _DEFAULT_AUTH_CONFIG = dict(

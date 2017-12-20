@@ -57,8 +57,7 @@ class PolicyIdentifierMixin(object):
             raise Exception('Unknown policy "{}"'.format(identifier))
 
         for item in result['items']:
-            if item['name'] != identifier:
-                continue
-            return item['uuid']
+            if item['name'] == identifier:
+                return item['uuid']
 
         raise Exception('Unknown policy "{}"'.format(identifier))

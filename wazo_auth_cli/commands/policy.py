@@ -23,7 +23,10 @@ class PolicyCreate(Command):
         self.app.LOG.debug('%s', parsed_args.acl)
 
         policy = self.app.client.policies.new(
-            parsed_args.name, parsed_args.description, parsed_args.acl)
+            parsed_args.name,
+            parsed_args.description,
+            parsed_args.acl,
+        )
         self.app.LOG.info(policy)
         self.app.stdout.write(policy['uuid'] + '\n')
 
