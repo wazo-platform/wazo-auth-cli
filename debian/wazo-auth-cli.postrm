@@ -6,7 +6,7 @@ COMPLETION_SCRIPT="/etc/bash_completion.d/wazo-auth-cli"
 
 case "$1" in
     remove)
-        if [ -e "${COMPLETION_SCRIPT} ]; then
+        if [ -e "${COMPLETION_SCRIPT}" ]; then
            rm -f "${COMPLETION_SCRIPT}"
         fi
     ;;
