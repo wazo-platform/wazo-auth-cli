@@ -64,13 +64,13 @@ class WazoAuthCLI(App):
         self.client = Client(**auth_config)
 
         if self.options.token:
-            self._auth_token = self.options.token
+            self._current_token = self.options.token
         else:
             token_data = self.client.token.new(backend, expiration=3600)
-            self._auth_token = token_data['token']
+            self._current_token = token_data['token']
             self._remove_token = True
 
-        self.client.set_token(self._auth_token)
+        self.client.set_token(self._current_token)
 
     def clean_up(self, cmd, result, err):
         if err:
