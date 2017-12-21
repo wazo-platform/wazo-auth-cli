@@ -35,7 +35,7 @@ class UserCreate(Command):
     def get_parser(self, prog_name):
         parser = super(UserCreate, self).get_parser(prog_name)
         parser.add_argument('--password', help="the user's password", required=True)
-        parser.add_argument('--email', help="the user's main email address", required=True)
+        parser.add_argument('--email', help="the user's main email address")
         parser.add_argument('name', help="the user's username")
         return parser
 
@@ -43,11 +43,12 @@ class UserCreate(Command):
         self.app.LOG.debug(parsed_args)
         body = dict(
             username=parsed_args.name,
-            email_address=parsed_args.email,
             password=parsed_args.password,
         )
-        self.app.LOG.debug('Creating user %s', body)
+        if parsed_args.email:
+            body['email_address'] = parsed_args.email
 
+        self.app.LOG.debug('Creating user %s', body)
         user = self.app.client.users.new(**body)
         self.app.LOG.info(user)
         self.app.stdout.write(user['uuid'] + '\n')
@@ -82,12 +83,22 @@ class UserList(ListBuildingMixin, Lister):
 
     def _add_email_column(self, items):
         for item in items:
-            for email in item['emails']:
-                if not email['main']:
-                    continue
-                item['email'] = email['address']
-                break
+            email = self._main_email(item['emails']) or self._first_email(item['emails'])
+            item['email'] = email
         return items
+
+    @staticmethod
+    def _main_email(emails):
+        for email in emails:
+            if email['main']:
+                return email['address']
+        return ''
+
+    @staticmethod
+    def _first_email(emails):
+        for email in emails:
+            return email['address']
+        return ''
 
 
 class UserRemove(UserIdentifierMixin, PolicyIdentifierMixin, Command):
