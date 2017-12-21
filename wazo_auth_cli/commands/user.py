@@ -34,6 +34,7 @@ class UserCreate(Command):
 
     def get_parser(self, prog_name):
         parser = super(UserCreate, self).get_parser(prog_name)
+        parser.add_argument('--uuid', help="The user's UUID when matching a PBX user")
         parser.add_argument('--password', help="the user's password", required=True)
         parser.add_argument('--email', help="the user's main email address")
         parser.add_argument('name', help="the user's username")
@@ -45,6 +46,8 @@ class UserCreate(Command):
             username=parsed_args.name,
             password=parsed_args.password,
         )
+        if parsed_args.uuid:
+            body['uuid'] = parsed_args.uuid
         if parsed_args.email:
             body['email_address'] = parsed_args.email
 
