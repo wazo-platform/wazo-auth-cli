@@ -25,6 +25,8 @@ class WazoAuthCLI(App):
         )
         self._current_token = None
         self._remove_token = False
+        self._client = None
+        self._backend = None
 
     def build_option_parser(self, *args, **kwargs):
         parser = super(WazoAuthCLI, self).build_option_parser(*args, **kwargs)
@@ -52,6 +54,21 @@ class WazoAuthCLI(App):
 
         return parser
 
+    @property
+    def client(self):
+        if not self._client:
+            self._client = Client(**self._auth_config)
+
+        if not self._current_token:
+            self._backend = self._auth_config.pop('backend') or self._backend
+            self._client = Client(**self._auth_config)
+            token_data = self._client.token.new(self._backend, expiration=3600)
+            self._current_token = token_data['token']
+
+        self._client.set_token(self._current_token)
+
+        return self._client
+
     def initialize_app(self, argv):
         self.LOG.debug('Wazo Auth CLI')
         self.LOG.debug('options=%s', self.options)
@@ -59,18 +76,7 @@ class WazoAuthCLI(App):
         self.LOG.debug('Starting with config: %s', conf)
 
         self.LOG.debug('client args: %s', conf['auth'])
-        auth_config = dict(conf['auth'])
-        backend = auth_config.pop('backend', None)
-        self.client = Client(**auth_config)
-
-        if self.options.token:
-            self._current_token = self.options.token
-        else:
-            token_data = self.client.token.new(backend, expiration=3600)
-            self._current_token = token_data['token']
-            self._remove_token = True
-
-        self.client.set_token(self._current_token)
+        self._auth_config = dict(conf['auth'])
 
     def clean_up(self, cmd, result, err):
         if err:
