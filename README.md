@@ -17,6 +17,20 @@ The `/etc/wazo-auth-cli/conf.d/*.yml` files will be used to override the default
 
 The `~/.config/wazo-auth-cli/*.yml` files will be used to override the global configuration files for a given user. This directory will generally include files containing credentials.
 
+The user's configuration file directory are not read automatically at the moment. wazo-auth-cli can be launched using the --config option to read this directory.
+
+```sh
+wazo-auth-cli --config ~/.config/wazo-auth-cli
+```
+
+The `WAZO_AUTH_CLI_CONFIG` environment variable can also be used to avoid having to use the `--config` option.
+
+```sh
+export WAZO_AUTH_CLI_CONFIG=~/.config/wazo-auth-cli
+```
+
+This line can also be added to the user's `~/.bashrc` to avoid typing it at each session
+
 A credential files should be created for the root user when wazo-auth is installed
 
 ```sh
