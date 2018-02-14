@@ -41,6 +41,19 @@ class PolicyCreate(PolicyIdentifierMixin, Command):
             raise
 
 
+class PolicyDelete(PolicyIdentifierMixin, Command):
+
+    def get_parser(self, *args, **kwargs):
+        parser = super().get_parser(*args, **kwargs)
+        parser.add_argument('identifier', help="The name or UUID of the policy to delete")
+        return parser
+
+    def take_action(self, parsed_args):
+        uuid = self.get_policy_uuid(self.app.client, parsed_args.identifier)
+        self.app.LOG.debug('Deleting policy %s', uuid)
+        self.app.client.policies.delete(uuid)
+
+
 class PolicyList(ListBuildingMixin, Lister):
 
     _columns = ['uuid', 'name', 'description']
