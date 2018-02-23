@@ -1,4 +1,4 @@
-# Copyright 2017 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2017-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 from uuid import UUID
@@ -30,6 +30,19 @@ class ListBuildingMixin(object):
             result = [item[header] for header in headers]
             results.append(result)
         return results
+
+
+class TenantIdentifierMixin(object):
+
+    def get_tenant_uuid(self, client, identifier):
+        if is_uuid(identifier):
+            return identifier
+
+        result = client.tenants.list(name=identifier)
+        if not result['items']:
+            raise Exception('Unknown tenant "{}"'.format(identifier))
+
+        return result['items'][0]['uuid']
 
 
 class UserIdentifierMixin(object):

@@ -3,6 +3,29 @@
 
 from cliff.command import Command
 
+from ..helpers import TenantIdentifierMixin, UserIdentifierMixin
+
+
+class TenantAdd(TenantIdentifierMixin, UserIdentifierMixin, Command):
+
+    def get_parser(self, *args, **kwargs):
+        parser = super().get_parser(*args, **kwargs)
+        relation = parser.add_mutually_exclusive_group(required=True)
+        relation.add_argument('--user',
+                              help='The username or UUID of the user to add to this tenant')
+        parser.add_argument('identifier', help='name or UUID of the tenant')
+        return parser
+
+    def take_action(self, parsed_args):
+        uuid = self.get_tenant_uuid(self.app.client, parsed_args.identifier)
+
+        if parsed_args.user:
+            return self._add_user(uuid, parsed_args)
+
+    def _add_user(self, uuid, parsed_args):
+        user_uuid = self.get_user_uuid(self.app.client, parsed_args.user)
+        self.app.client.tenants.add_user(uuid, user_uuid)
+
 
 class TenantCreate(Command):
 
