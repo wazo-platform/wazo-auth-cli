@@ -28,6 +28,7 @@ setup(
             'user_list = wazo_auth_cli.commands.user:UserList',
             'user_remove = wazo_auth_cli.commands.user:UserRemove',
             'user_show = wazo_auth_cli.commands.user:UserShow',
+            'tenant_create = wazo_auth_cli.commands.tenant:TenantCreate',
             'token_create = wazo_auth_cli.commands.token:TokenCreate',
         ],
     },
