@@ -1,4 +1,4 @@
-# Copyright 2017 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2017-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 import json
@@ -37,6 +37,8 @@ class UserCreate(Command):
         parser.add_argument('--uuid', help="The user's UUID when matching a PBX user")
         parser.add_argument('--password', help="the user's password", required=True)
         parser.add_argument('--email', help="the user's main email address")
+        parser.add_argument('--firstname', help="The user's firstname")
+        parser.add_argument('--lastname', help="The user's lastname")
         parser.add_argument('name', help="the user's username")
         return parser
 
@@ -50,6 +52,10 @@ class UserCreate(Command):
             body['uuid'] = parsed_args.uuid
         if parsed_args.email:
             body['email_address'] = parsed_args.email
+        if parsed_args.firstname:
+            body['firstname'] = parsed_args.firstname
+        if parsed_args.lastname:
+            body['lastname'] = parsed_args.lastname
 
         self.app.LOG.debug('Creating user %s', body)
         user = self.app.client.users.new(**body)
