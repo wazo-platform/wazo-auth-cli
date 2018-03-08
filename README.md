@@ -56,7 +56,7 @@ systemctl restart wazo-auth
 Creating a new user
 
 ```sh
-wazo-auth-cli --hostname mywazo --insecure --auth-username test --auth-password test --backend xivo_service user create --passwd baz --email "baz@example.com" baz
+wazo-auth-cli --hostname mywazo --insecure --auth-username test --auth-password test --backend xivo_service user create --password baz --email "baz@example.com" baz
 ```
 
 Listing users
