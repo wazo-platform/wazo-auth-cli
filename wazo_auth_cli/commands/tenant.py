@@ -2,8 +2,9 @@
 # SPDX-License-Identifier: GPL-3.0+
 
 from cliff.command import Command
+from cliff.lister import Lister
 
-from ..helpers import TenantIdentifierMixin, UserIdentifierMixin
+from ..helpers import TenantIdentifierMixin, UserIdentifierMixin, ListBuildingMixin
 
 
 class TenantAdd(TenantIdentifierMixin, UserIdentifierMixin, Command):
@@ -65,3 +66,17 @@ class TenantRemove(TenantIdentifierMixin, UserIdentifierMixin, Command):
     def _remove_user(self, uuid, parsed_args):
         user_uuid = self.get_user_uuid(self.app.client, parsed_args.user)
         self.app.client.tenants.remove_user(uuid, user_uuid)
+
+
+class TenantList(ListBuildingMixin, Lister):
+
+    _columns = ['uuid', 'name']
+
+    def take_action(self, parsed_args):
+        result = self.app.client.tenants.list()
+        if not result['items']:
+            return (), ()
+
+        headers = self.extract_column_headers(raw_items[0])
+        items = self.extract_items(headers, result['items'])
+        return headers, items
