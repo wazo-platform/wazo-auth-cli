@@ -33,6 +33,7 @@ setup(
             'tenant_remove = wazo_auth_cli.commands.tenant:TenantRemove',
             'tenant_delete = wazo_auth_cli.commands.tenant:TenantDelete',
             'tenant_list = wazo_auth_cli.commands.tenant:TenantList',
+            'tenant_show = wazo_auth_cli.commands.tenant:TenantShow',
             'token_create = wazo_auth_cli.commands.token:TokenCreate',
         ],
     },

@@ -1,6 +1,8 @@
 # Copyright 2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
+import json
+
 from cliff.command import Command
 from cliff.lister import Lister
 
@@ -92,3 +94,16 @@ class TenantList(ListBuildingMixin, Lister):
         headers = self.extract_column_headers(result['items'][0])
         items = self.extract_items(headers, result['items'])
         return headers, items
+
+
+class TenantShow(TenantIdentifierMixin, UserIdentifierMixin, Command):
+
+    def get_parser(self, *args, **kwargs):
+        parser = super().get_parser(*args, **kwargs)
+        parser.add_argument('identifier', help='tenant or UUID')
+        return parser
+
+    def take_action(self, parsed_args):
+        uuid = self.get_user_uuid(self.app.client, parsed_args.identifier)
+        tenant = self.app.client.tenants.get(uuid)
+        self.app.stdout.write(json.dumps(tenant, indent=True, sort_keys=True) + '\n')
