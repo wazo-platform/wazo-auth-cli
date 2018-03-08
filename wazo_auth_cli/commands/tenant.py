@@ -77,6 +77,6 @@ class TenantList(ListBuildingMixin, Lister):
         if not result['items']:
             return (), ()
 
-        headers = self.extract_column_headers(raw_items[0])
+        headers = self.extract_column_headers(result['items'][0])
         items = self.extract_items(headers, result['items'])
         return headers, items
