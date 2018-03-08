@@ -46,6 +46,18 @@ class TenantCreate(Command):
         self.app.LOG.info(tenant)
         self.app.stdout.write(tenant['uuid'] + '\n')
 
+class TenantDelete(TenantIdentifierMixin, UserIdentifierMixin, Command):
+
+    def get_parser(self, *args, **kwargs):
+        parser = super().get_parser(*args, **kwargs)
+        parser.add_argument('identifier', help="The tenant or UUID of the tenant to delete")
+        return parser
+
+    def take_action(self, parsed_args):
+        uuid = self.get_user_uuid(self.app.client, parsed_args.identifier)
+        self.app.LOG.debug('Deleting tenant %s', uuid)
+        self.app.client.tenants.delete(uuid)
+
 
 class TenantRemove(TenantIdentifierMixin, UserIdentifierMixin, Command):
 
