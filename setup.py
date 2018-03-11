@@ -36,6 +36,7 @@ setup(
             'tenant_show = wazo_auth_cli.commands.tenant:TenantShow',
             'token_create = wazo_auth_cli.commands.token:TokenCreate',
             'token_show = wazo_auth_cli.commands.token:TokenShow',
+            'token_revoke = wazo_auth_cli.commands.token:TokenRevoke',
         ],
     },
 )

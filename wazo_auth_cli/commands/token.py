@@ -25,3 +25,14 @@ class TokenShow(Command):
     def take_action(self, parsed_args):
         token = self.app.client.token.get(parsed_args.identifier)
         self.app.stdout.write(json.dumps(token, indent=True, sort_keys=True) + '\n')
+
+
+class TokenRevoke(Command):
+
+    def get_parser(self, *args, **kwargs):
+        parser = super().get_parser(*args, **kwargs)
+        parser.add_argument('identifier', help='token')
+        return parser
+
+    def take_action(self, parsed_args):
+        self.app.client.token.revoke(parsed_args.identifier)
