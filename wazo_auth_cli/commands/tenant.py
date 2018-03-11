@@ -10,6 +10,7 @@ from ..helpers import TenantIdentifierMixin, UserIdentifierMixin, ListBuildingMi
 
 
 class TenantAdd(TenantIdentifierMixin, UserIdentifierMixin, Command):
+    "Add tenant to a user"
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
@@ -31,6 +32,7 @@ class TenantAdd(TenantIdentifierMixin, UserIdentifierMixin, Command):
 
 
 class TenantCreate(Command):
+    "Create new tenant"
 
     def get_parser(self, prog_name):
         parser = super(TenantCreate, self).get_parser(prog_name)
@@ -49,6 +51,7 @@ class TenantCreate(Command):
         self.app.stdout.write(tenant['uuid'] + '\n')
 
 class TenantDelete(TenantIdentifierMixin, UserIdentifierMixin, Command):
+    "Delete tenant"
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
@@ -62,6 +65,7 @@ class TenantDelete(TenantIdentifierMixin, UserIdentifierMixin, Command):
 
 
 class TenantRemove(TenantIdentifierMixin, UserIdentifierMixin, Command):
+    "Remove tenant to user"
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
@@ -83,6 +87,7 @@ class TenantRemove(TenantIdentifierMixin, UserIdentifierMixin, Command):
 
 
 class TenantList(ListBuildingMixin, Lister):
+    "List tenants"
 
     _columns = ['uuid', 'name']
 
@@ -97,6 +102,7 @@ class TenantList(ListBuildingMixin, Lister):
 
 
 class TenantShow(TenantIdentifierMixin, UserIdentifierMixin, Command):
+    "Show tenant informations"
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)

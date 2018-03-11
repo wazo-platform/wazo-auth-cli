@@ -10,6 +10,7 @@ from ..helpers import ListBuildingMixin, PolicyIdentifierMixin, UserIdentifierMi
 
 
 class UserAdd(UserIdentifierMixin, PolicyIdentifierMixin, Command):
+    "Add policy to a user"
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
@@ -31,6 +32,7 @@ class UserAdd(UserIdentifierMixin, PolicyIdentifierMixin, Command):
 
 
 class UserCreate(Command):
+    "Add new user"
 
     def get_parser(self, prog_name):
         parser = super(UserCreate, self).get_parser(prog_name)
@@ -64,6 +66,7 @@ class UserCreate(Command):
 
 
 class UserDelete(UserIdentifierMixin, Command):
+    "Delete user"
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
@@ -77,6 +80,7 @@ class UserDelete(UserIdentifierMixin, Command):
 
 
 class UserList(ListBuildingMixin, Lister):
+    "List users"
 
     _columns = ['uuid', 'username', 'email']
     _removed_columns = ['emails']
@@ -112,6 +116,7 @@ class UserList(ListBuildingMixin, Lister):
 
 
 class UserRemove(UserIdentifierMixin, PolicyIdentifierMixin, Command):
+    "Remove policy to user"
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
@@ -133,6 +138,7 @@ class UserRemove(UserIdentifierMixin, PolicyIdentifierMixin, Command):
 
 
 class UserShow(UserIdentifierMixin, Command):
+    "Show user informations"
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)

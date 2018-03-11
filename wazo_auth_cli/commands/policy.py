@@ -11,6 +11,7 @@ from ..helpers import ListBuildingMixin, PolicyIdentifierMixin
 
 
 class PolicyCreate(PolicyIdentifierMixin, Command):
+    "Create policy"
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
@@ -42,6 +43,7 @@ class PolicyCreate(PolicyIdentifierMixin, Command):
 
 
 class PolicyDelete(PolicyIdentifierMixin, Command):
+    "Delete policy"
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
@@ -55,6 +57,7 @@ class PolicyDelete(PolicyIdentifierMixin, Command):
 
 
 class PolicyList(ListBuildingMixin, Lister):
+    "List all policies available"
 
     _columns = ['uuid', 'name', 'description']
     _removed_columns = ['acl_templates']
@@ -70,6 +73,7 @@ class PolicyList(ListBuildingMixin, Lister):
 
 
 class PolicyShow(PolicyIdentifierMixin, Command):
+    "Show policy"
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)

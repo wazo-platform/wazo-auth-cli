@@ -7,6 +7,7 @@ from cliff.command import Command
 
 
 class TokenCreate(Command):
+    "Create new token"
 
     def take_action(self, parsed_args):
         backend = self.app.options.backend
@@ -16,6 +17,7 @@ class TokenCreate(Command):
 
 
 class TokenShow(Command):
+    "Show token informations"
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
@@ -28,6 +30,7 @@ class TokenShow(Command):
 
 
 class TokenRevoke(Command):
+    "Revoke token"
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
