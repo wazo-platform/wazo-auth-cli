@@ -45,6 +45,19 @@ class TenantIdentifierMixin(object):
         return result['items'][0]['uuid']
 
 
+class GroupIdentifierMixin(object):
+
+    def get_group_uuid(self, client, identifier):
+        if is_uuid(identifier):
+            return identifier
+
+        result = client.groups.list(name=identifier)
+        if not result['items']:
+            raise Exception('Unknown group "{}"'.format(identifier))
+
+        return result['items'][0]['uuid']
+
+
 class UserIdentifierMixin(object):
 
     def get_user_uuid(self, client, identifier):

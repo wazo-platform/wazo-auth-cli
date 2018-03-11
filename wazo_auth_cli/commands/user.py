@@ -6,17 +6,23 @@ import json
 from cliff.command import Command
 from cliff.lister import Lister
 
-from ..helpers import ListBuildingMixin, PolicyIdentifierMixin, UserIdentifierMixin
+from ..helpers import (
+    ListBuildingMixin,
+    PolicyIdentifierMixin,
+    UserIdentifierMixin,
+    GroupIdentifierMixin)
 
 
-class UserAdd(UserIdentifierMixin, PolicyIdentifierMixin, Command):
-    "Add policy to a user"
+class UserAdd(UserIdentifierMixin, PolicyIdentifierMixin, GroupIdentifierMixin, Command):
+    "Add policy or/and group to a user"
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
         relation = parser.add_mutually_exclusive_group(required=True)
         relation.add_argument('--policy',
                               help='The name or UUID of the policy to add to this user')
+        relation.add_argument('--group',
+                              help='The name or UUID of the group to add to this user')
         parser.add_argument('identifier', help='username or UUID')
         return parser
 
@@ -26,9 +32,16 @@ class UserAdd(UserIdentifierMixin, PolicyIdentifierMixin, Command):
         if parsed_args.policy:
             return self._add_policy(uuid, parsed_args)
 
+        if parsed_args.group:
+            return self._add_group(uuid, parsed_args)
+
     def _add_policy(self, uuid, parsed_args):
         policy_uuid = self.get_policy_uuid(self.app.client, parsed_args.policy)
         self.app.client.users.add_policy(uuid, policy_uuid)
+
+    def _add_group(self, uuid, parsed_args):
+        group_uuid = self.get_group_uuid(self.app.client, parsed_args.group)
+        self.app.client.groups.add_user(group_uuid, uuid)
 
 
 class UserCreate(Command):
@@ -115,14 +128,16 @@ class UserList(ListBuildingMixin, Lister):
         return ''
 
 
-class UserRemove(UserIdentifierMixin, PolicyIdentifierMixin, Command):
-    "Remove policy to user"
+class UserRemove(UserIdentifierMixin, PolicyIdentifierMixin, GroupIdentifierMixin, Command):
+    "Remove policy or/and group to user"
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
         relation = parser.add_mutually_exclusive_group(required=True)
         relation.add_argument('--policy',
                               help='The name or UUID of the policy to remove from this user')
+        relation.add_argument('--group',
+                              help='The name or UUID of the group to remove from this user')
         parser.add_argument('identifier', help='username or UUID')
         return parser
 
@@ -132,9 +147,16 @@ class UserRemove(UserIdentifierMixin, PolicyIdentifierMixin, Command):
         if parsed_args.policy:
             return self._remove_policy(uuid, parsed_args)
 
+        if parsed_args.group:
+            return self._remove_group(uuid, parsed_args)
+
     def _remove_policy(self, uuid, parsed_args):
         policy_uuid = self.get_policy_uuid(self.app.client, parsed_args.policy)
         self.app.client.users.remove_policy(uuid, policy_uuid)
+
+    def _remove_group(self, uuid, parsed_args):
+        group_uuid = self.get_group_uuid(self.app.client, parsed_args.policy)
+        self.app.client.groups.remove_user(group_uuid, uuid)
 
 
 class UserShow(UserIdentifierMixin, Command):
