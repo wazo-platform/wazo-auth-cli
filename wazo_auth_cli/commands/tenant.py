@@ -50,6 +50,7 @@ class TenantCreate(Command):
         self.app.LOG.info(tenant)
         self.app.stdout.write(tenant['uuid'] + '\n')
 
+
 class TenantDelete(TenantIdentifierMixin, UserIdentifierMixin, Command):
     "Delete tenant"
 
@@ -89,7 +90,7 @@ class TenantRemove(TenantIdentifierMixin, UserIdentifierMixin, Command):
 class TenantList(ListBuildingMixin, Lister):
     "List tenants"
 
-    _columns = ['uuid', 'name']
+    _columns = ['uuid', 'name', 'contact', 'phone', 'address', 'parent_uuid']
 
     def take_action(self, parsed_args):
         result = self.app.client.tenants.list()
