@@ -31,24 +31,30 @@ class TenantAdd(TenantIdentifierMixin, UserIdentifierMixin, Command):
         self.app.client.tenants.add_user(uuid, user_uuid)
 
 
-class TenantCreate(Command):
+class TenantCreate(TenantIdentifierMixin, Command):
     "Create new tenant"
 
     def get_parser(self, prog_name):
         parser = super(TenantCreate, self).get_parser(prog_name)
+        parser.add_argument('--parent', help="The tenant's parent name or UUID")
         parser.add_argument('name', help="the tenant's name")
         return parser
 
     def take_action(self, parsed_args):
         self.app.LOG.debug(parsed_args)
-        body = dict(
-            name=parsed_args.name,
-        )
+        body = {
+            'name': parsed_args.name,
+        }
+
+        if parsed_args.parent:
+            parent_uuid = self.get_tenant_uuid(self.app.client, parsed_args.parent)
+            body['parent_uuid'] = parent_uuid
 
         self.app.LOG.debug('Creating tenant %s', body)
         tenant = self.app.client.tenants.new(**body)
         self.app.LOG.info(tenant)
         self.app.stdout.write(tenant['uuid'] + '\n')
+
 
 class TenantDelete(TenantIdentifierMixin, UserIdentifierMixin, Command):
     "Delete tenant"
@@ -89,7 +95,7 @@ class TenantRemove(TenantIdentifierMixin, UserIdentifierMixin, Command):
 class TenantList(ListBuildingMixin, Lister):
     "List tenants"
 
-    _columns = ['uuid', 'name']
+    _columns = ['uuid', 'name', 'contact', 'phone', 'address', 'parent_uuid']
 
     def take_action(self, parsed_args):
         result = self.app.client.tenants.list()

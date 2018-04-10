@@ -97,6 +97,20 @@ Creating a policy
 wazo-auth-cli policy create --acl "auth.users.*.read" "auth.users.create" -- mypolicy
 ```
 
+### Tenants
+
+Creating a tenant
+
+```sh
+wazo-auth-cli tenant create mytenant
+```
+
+Creating a tenant as a subtenant of another tenant
+
+```sh
+wazo-auth-cli tenant create --parent mytenant othertenant
+```
+
 ### Other commands
 
 ```sh
