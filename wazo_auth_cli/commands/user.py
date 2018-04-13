@@ -98,8 +98,13 @@ class UserList(ListBuildingMixin, Lister):
     _columns = ['uuid', 'username', 'email']
     _removed_columns = ['emails']
 
+    def get_parser(self, *args, **kwargs):
+        parser = super().get_parser(*args, **kwargs)
+        parser.add_argument('--recurse', help='Show users in all subtenants', action='store_true')
+        return parser
+
     def take_action(self, parsed_args):
-        result = self.app.client.users.list()
+        result = self.app.client.users.list(recurse=parsed_args.recurse)
         if not result['items']:
             return (), ()
 
