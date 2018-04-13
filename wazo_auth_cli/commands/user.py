@@ -98,7 +98,7 @@ class UserDelete(UserIdentifierMixin, Command):
         self.app.client.users.delete(uuid)
 
 
-class UserList(ListBuildingMixin, Lister):
+class UserList(TenantIdentifierMixin, ListBuildingMixin, Lister):
     "List users"
 
     _columns = ['uuid', 'username', 'email']
@@ -107,10 +107,19 @@ class UserList(ListBuildingMixin, Lister):
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
         parser.add_argument('--recurse', help='Show users in all subtenants', action='store_true')
+        parser.add_argument('--tenant', help="The user's tenant")
         return parser
 
     def take_action(self, parsed_args):
-        result = self.app.client.users.list(recurse=parsed_args.recurse)
+        kwargs = {
+            'recurse': parsed_args.recurse,
+        }
+
+        if parsed_args.tenant:
+            tenant_uuid = self.get_tenant_uuid(self.app.client, parsed_args.tenant)
+            kwargs['tenant_uuid'] = tenant_uuid
+
+        result = self.app.client.users.list(**kwargs)
         if not result['items']:
             return (), ()
 
