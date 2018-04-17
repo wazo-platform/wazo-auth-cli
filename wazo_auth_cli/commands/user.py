@@ -107,7 +107,7 @@ class UserList(TenantIdentifierMixin, ListBuildingMixin, Lister):
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
         parser.add_argument('--recurse', help='Show users in all subtenants', action='store_true')
-        parser.add_argument('--tenant', help="The user's tenant")
+        parser.add_argument('--tenant', help="Show users in a specific tenant")
         return parser
 
     def take_action(self, parsed_args):
