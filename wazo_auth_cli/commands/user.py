@@ -7,10 +7,12 @@ from cliff.command import Command
 from cliff.lister import Lister
 
 from ..helpers import (
+    GroupIdentifierMixin,
     ListBuildingMixin,
     PolicyIdentifierMixin,
+    TenantIdentifierMixin,
     UserIdentifierMixin,
-    GroupIdentifierMixin)
+)
 
 
 class UserAdd(UserIdentifierMixin, PolicyIdentifierMixin, GroupIdentifierMixin, Command):
@@ -44,7 +46,7 @@ class UserAdd(UserIdentifierMixin, PolicyIdentifierMixin, GroupIdentifierMixin, 
         self.app.client.groups.add_user(group_uuid, uuid)
 
 
-class UserCreate(Command):
+class UserCreate(TenantIdentifierMixin, Command):
     "Add new user"
 
     def get_parser(self, prog_name):
@@ -54,6 +56,7 @@ class UserCreate(Command):
         parser.add_argument('--email', help="the user's main email address")
         parser.add_argument('--firstname', help="The user's firstname")
         parser.add_argument('--lastname', help="The user's lastname")
+        parser.add_argument('--tenant', help="The user's tenant")
         parser.add_argument('name', help="the user's username")
         return parser
 
@@ -71,6 +74,9 @@ class UserCreate(Command):
             body['firstname'] = parsed_args.firstname
         if parsed_args.lastname:
             body['lastname'] = parsed_args.lastname
+        if parsed_args.tenant:
+            tenant_uuid = self.get_tenant_uuid(self.app.client, parsed_args.tenant)
+            body['tenant_uuid'] = tenant_uuid
 
         self.app.LOG.debug('Creating user %s', body)
         user = self.app.client.users.new(**body)
@@ -92,14 +98,28 @@ class UserDelete(UserIdentifierMixin, Command):
         self.app.client.users.delete(uuid)
 
 
-class UserList(ListBuildingMixin, Lister):
+class UserList(TenantIdentifierMixin, ListBuildingMixin, Lister):
     "List users"
 
     _columns = ['uuid', 'username', 'email']
     _removed_columns = ['emails']
 
+    def get_parser(self, *args, **kwargs):
+        parser = super().get_parser(*args, **kwargs)
+        parser.add_argument('--recurse', help='Show users in all subtenants', action='store_true')
+        parser.add_argument('--tenant', help="Show users in a specific tenant")
+        return parser
+
     def take_action(self, parsed_args):
-        result = self.app.client.users.list()
+        kwargs = {
+            'recurse': parsed_args.recurse,
+        }
+
+        if parsed_args.tenant:
+            tenant_uuid = self.get_tenant_uuid(self.app.client, parsed_args.tenant)
+            kwargs['tenant_uuid'] = tenant_uuid
+
+        result = self.app.client.users.list(**kwargs)
         if not result['items']:
             return (), ()
 
