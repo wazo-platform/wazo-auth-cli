@@ -7,10 +7,14 @@ import requests
 from cliff.command import Command
 from cliff.lister import Lister
 
-from ..helpers import ListBuildingMixin, PolicyIdentifierMixin
+from ..helpers import (
+    ListBuildingMixin,
+    PolicyIdentifierMixin,
+    TenantIdentifierMixin,
+)
 
 
-class PolicyCreate(PolicyIdentifierMixin, Command):
+class PolicyCreate(PolicyIdentifierMixin, TenantIdentifierMixin, Command):
     "Create policy"
 
     def get_parser(self, *args, **kwargs):
@@ -19,19 +23,25 @@ class PolicyCreate(PolicyIdentifierMixin, Command):
         parser.add_argument('--acl', nargs='+', help='acl to assign to the new policy')
         parser.add_argument('--or-show', action='store_true',
                             help='show the policy UUID if this policy name already exists')
+        parser.add_argument('--tenant', help="The policy's tenant")
         parser.add_argument('name', help='the policy name')
         return parser
 
     def take_action(self, parsed_args):
         self.app.LOG.debug('Creating a new policy %s', parsed_args.name)
         self.app.LOG.debug('%s', parsed_args.acl)
+        body = {
+            'name': parsed_args.name,
+            'description': parsed_args.description,
+            'acl_templates': parsed_args.acl,
+        }
+
+        if parsed_args.tenant:
+            tenant_uuid = self.get_tenant_uuid(self.app.client, parsed_args.tenant)
+            body['tenant_uuid'] = tenant_uuid
 
         try:
-            policy = self.app.client.policies.new(
-                parsed_args.name,
-                parsed_args.description,
-                parsed_args.acl,
-            )
+            policy = self.app.client.policies.new(**body)
             self.app.LOG.info(policy)
             self.app.stdout.write(policy['uuid'] + '\n')
         except requests.HTTPError as e:
@@ -56,14 +66,27 @@ class PolicyDelete(PolicyIdentifierMixin, Command):
         self.app.client.policies.delete(uuid)
 
 
-class PolicyList(ListBuildingMixin, Lister):
+class PolicyList(ListBuildingMixin, TenantIdentifierMixin, Lister):
     "List all policies available"
 
-    _columns = ['uuid', 'name', 'description']
+    _columns = ['uuid', 'name', 'description', 'tenant_uuid']
     _removed_columns = ['acl_templates']
 
+    def get_parser(self, *args, **kwargs):
+        parser = super().get_parser(*args, **kwargs)
+        parser.add_argument('--recurse', help='Show policies in all subtenants', action='store_true')
+        parser.add_argument('--tenant', help="Show policies in a specific tenant")
+        return parser
+
     def take_action(self, parsed_args):
-        result = self.app.client.policies.list()
+        args = {}
+        if parsed_args.tenant:
+            tenant_uuid = self.get_tenant_uuid(self.app.client, parsed_args.tenant)
+            args['tenant_uuid'] = tenant_uuid
+        if parsed_args.recurse:
+            args['recurse'] = True
+
+        result = self.app.client.policies.list(**args)
         if not result['items']:
             return (), ()
 

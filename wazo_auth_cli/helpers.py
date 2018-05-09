@@ -64,7 +64,7 @@ class UserIdentifierMixin(object):
         if is_uuid(identifier):
             return identifier
 
-        result = client.users.list(username=identifier)
+        result = client.users.list(username=identifier, recurse=True)
         if not result['items']:
             raise Exception('Unknown user "{}"'.format(identifier))
 
@@ -78,7 +78,7 @@ class PolicyIdentifierMixin(object):
             return identifier
 
         # TODO: update to use name=identifier once the client implements it and remove the loop
-        result = client.policies.list(search=identifier)
+        result = client.policies.list(search=identifier, recurse=True)
         if not result['items']:
             raise Exception('Unknown policy "{}"'.format(identifier))
 
