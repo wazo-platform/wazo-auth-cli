@@ -1,4 +1,4 @@
-# Copyright 2017 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2017-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 import sys
@@ -60,8 +60,11 @@ class WazoAuthCLI(App):
             self._client = Client(**self._auth_config)
 
         if not self._current_token:
-            self._backend = self._auth_config.pop('backend') or self._backend
+            self._backend = self._auth_config.pop('backend', None) or self._backend
             self._client = Client(**self._auth_config)
+            if not self._backend:
+                self.LOG.error('No auth backend specified. Use --backend or user a configuration file')
+                sys.exit(1)
             token_data = self._client.token.new(self._backend, expiration=3600)
             self._current_token = token_data['token']
 
