@@ -14,12 +14,13 @@ from ..helpers import (
 )
 
 
-class GroupCreate(Command):
+class GroupCreate(TenantIdentifierMixin, Command):
     "Create new group"
 
     def get_parser(self, prog_name):
         parser = super(GroupCreate, self).get_parser(prog_name)
         parser.add_argument('name', help="the group's name")
+        parser.add_argument('--tenant', help="The user's tenant")
         return parser
 
     def take_action(self, parsed_args):
@@ -27,6 +28,10 @@ class GroupCreate(Command):
         body = dict(
             name=parsed_args.name,
         )
+
+        if parsed_args.tenant:
+            tenant_uuid = self.get_tenant_uuid(self.app.client, parsed_args.tenant)
+            body['tenant_uuid'] = tenant_uuid
 
         self.app.LOG.debug('Creating group %s', body)
         group = self.app.client.groups.new(**body)
@@ -48,13 +53,25 @@ class GroupDelete(Command):
         self.app.client.groups.delete(uuid)
 
 
-class GroupList(ListBuildingMixin, Lister):
+class GroupList(TenantIdentifierMixin, ListBuildingMixin, Lister):
     "List groups"
 
     _columns = ['uuid', 'name']
 
+    def get_parser(self, *args, **kwargs):
+        parser = super().get_parser(*args, **kwargs)
+        parser.add_argument('--recurse', help='Show users in all subtenants', action='store_true')
+        parser.add_argument('--tenant', help="Show users in a specific tenant")
+        return parser
+
     def take_action(self, parsed_args):
-        result = self.app.client.groups.list()
+        kwargs = {}
+        if parsed_args.recurse:
+            kwargs['recurse'] = parsed_args.recurse
+        if parsed_args.tenant:
+            kwargs['tenant_uuid'] = self.get_tenant_uuid(self.app.client, parsed_args.tenant)
+
+        result = self.app.client.groups.list(**kwargs)
         if not result['items']:
             return (), ()
 
