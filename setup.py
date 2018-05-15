@@ -42,6 +42,7 @@ setup(
             'group_delete = wazo_auth_cli.commands.group:GroupDelete',
             'group_show = wazo_auth_cli.commands.group:GroupShow',
             'group_list = wazo_auth_cli.commands.group:GroupList',
+            'group_remove = wazo_auth_cli.commands.group:GroupRemove',
         ],
     },
 )

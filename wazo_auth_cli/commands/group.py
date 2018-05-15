@@ -35,6 +35,27 @@ class GroupAdd(GroupIdentifierMixin, UserIdentifierMixin, Command):
         self.app.client.groups.add_user(uuid, user_uuid)
 
 
+class GroupRemove(GroupIdentifierMixin, UserIdentifierMixin, Command):
+    "Dissociate a group to another resource"
+
+    def get_parser(self, *args, **kwargs):
+        parser = super().get_parser(*args, **kwargs)
+        relation = parser.add_mutually_exclusive_group(required=True)
+        relation.add_argument('--user', help='The username of UUID of the user to add to this group')
+        parser.add_argument('identifier', help='name of UUID of the group')
+        return parser
+
+    def take_action(self, parsed_args):
+        uuid = self.get_group_uuid(self.app.client, parsed_args.identifier)
+
+        if parsed_args.user:
+            return self._remove_user(uuid, parsed_args)
+
+    def _remove_user(self, uuid, parsed_args):
+        user_uuid = self.get_user_uuid(self.app.client, parsed_args.user)
+        self.app.client.groups.remove_user(uuid, user_uuid)
+
+
 class GroupCreate(TenantIdentifierMixin, Command):
     "Create new group"
 
