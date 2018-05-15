@@ -6,7 +6,12 @@ import json
 from cliff.command import Command
 from cliff.lister import Lister
 
-from ..helpers import TenantIdentifierMixin, UserIdentifierMixin, ListBuildingMixin
+from ..helpers import (
+    GroupIdentifierMixin,
+    ListBuildingMixin,
+    TenantIdentifierMixin,
+    UserIdentifierMixin,
+)
 
 
 class GroupCreate(Command):
@@ -27,6 +32,7 @@ class GroupCreate(Command):
         group = self.app.client.groups.new(**body)
         self.app.LOG.info(group)
         self.app.stdout.write(group['uuid'] + '\n')
+
 
 class GroupDelete(Command):
     "Delete group"
@@ -57,7 +63,7 @@ class GroupList(ListBuildingMixin, Lister):
         return headers, items
 
 
-class GroupShow(Command):
+class GroupShow(GroupIdentifierMixin, Command):
     "Show group informations"
 
     def get_parser(self, *args, **kwargs):
@@ -66,6 +72,6 @@ class GroupShow(Command):
         return parser
 
     def take_action(self, parsed_args):
-        uuid = parsed_args.identifier
+        uuid = self.get_group_uuid(self.app.client, parsed_args.identifier)
         group = self.app.client.groups.get(uuid)
         self.app.stdout.write(json.dumps(group, indent=True, sort_keys=True) + '\n')
