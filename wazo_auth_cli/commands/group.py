@@ -14,6 +14,27 @@ from ..helpers import (
 )
 
 
+class GroupAdd(GroupIdentifierMixin, UserIdentifierMixin, Command):
+    "Associate a group to another resource"
+
+    def get_parser(self, *args, **kwargs):
+        parser = super().get_parser(*args, **kwargs)
+        relation = parser.add_mutually_exclusive_group(required=True)
+        relation.add_argument('--user', help='The username of UUID of the user to add to this group')
+        parser.add_argument('identifier', help='name of UUID of the group')
+        return parser
+
+    def take_action(self, parsed_args):
+        uuid = self.get_group_uuid(self.app.client, parsed_args.identifier)
+
+        if parsed_args.user:
+            return self._add_user(uuid, parsed_args)
+
+    def _add_user(self, uuid, parsed_args):
+        user_uuid = self.get_user_uuid(self.app.client, parsed_args.user)
+        self.app.client.groups.add_user(uuid, user_uuid)
+
+
 class GroupCreate(TenantIdentifierMixin, Command):
     "Create new group"
 
@@ -91,4 +112,5 @@ class GroupShow(GroupIdentifierMixin, Command):
     def take_action(self, parsed_args):
         uuid = self.get_group_uuid(self.app.client, parsed_args.identifier)
         group = self.app.client.groups.get(uuid)
+        group['users'] = self.app.client.groups.get_users(uuid)
         self.app.stdout.write(json.dumps(group, indent=True, sort_keys=True) + '\n')
