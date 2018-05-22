@@ -37,10 +37,12 @@ setup(
             'token_create = wazo_auth_cli.commands.token:TokenCreate',
             'token_show = wazo_auth_cli.commands.token:TokenShow',
             'token_revoke = wazo_auth_cli.commands.token:TokenRevoke',
+            'group_add = wazo_auth_cli.commands.group:GroupAdd',
             'group_create = wazo_auth_cli.commands.group:GroupCreate',
             'group_delete = wazo_auth_cli.commands.group:GroupDelete',
             'group_show = wazo_auth_cli.commands.group:GroupShow',
             'group_list = wazo_auth_cli.commands.group:GroupList',
+            'group_remove = wazo_auth_cli.commands.group:GroupRemove',
         ],
     },
 )
