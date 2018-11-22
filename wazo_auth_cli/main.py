@@ -77,6 +77,7 @@ class WazoAuthCLI(App):
         self.LOG.debug('options=%s', self.options)
         conf = config.build(self.options)
         self.LOG.debug('Starting with config: %s', conf)
+        self._current_token = self.options.token
 
         self.LOG.debug('client args: %s', conf['auth'])
         self._auth_config = dict(conf['auth'])
