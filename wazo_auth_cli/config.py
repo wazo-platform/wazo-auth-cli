@@ -1,4 +1,4 @@
-# Copyright 2017 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2017-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 import logging
@@ -39,7 +39,7 @@ def _args_to_dict(parsed_args):
         auth_config[config_name] = value
 
     if parsed_args.verify:
-        auth_config['verify_cerficate'] = True
+        auth_config['verify_certificate'] = True
     elif parsed_args.insecure:
         auth_config['verify_certificate'] = False
     elif parsed_args.cacert:
