@@ -10,8 +10,10 @@ class TokenCreate(Command):
     "Create new token"
 
     def take_action(self, parsed_args):
-        backend = self.app.options.backend
-        token_data = self.app.client_without_token.token.new(backend, expiration=3600)
+        params = {'expiration': 3600}
+        if self.app.options.backend:
+            params['backend'] = self.app.options.backend
+        token_data = self.app.client.token.new(**params)
         self.app.LOG.info(token_data)
         self.app.stdout.write(token_data['token'] + '\n')
 
