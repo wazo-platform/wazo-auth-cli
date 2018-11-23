@@ -56,6 +56,7 @@ class UserCreate(TenantIdentifierMixin, Command):
         parser.add_argument('--email', help="the user's main email address")
         parser.add_argument('--firstname', help="The user's firstname")
         parser.add_argument('--lastname', help="The user's lastname")
+        parser.add_argument('--purpose', help="The user's purpose")
         parser.add_argument('--tenant', help="The user's tenant")
         parser.add_argument('name', help="the user's username")
         return parser
@@ -74,6 +75,8 @@ class UserCreate(TenantIdentifierMixin, Command):
             body['firstname'] = parsed_args.firstname
         if parsed_args.lastname:
             body['lastname'] = parsed_args.lastname
+        if parsed_args.purpose:
+            body['purpose'] = parsed_args.purpose
         if parsed_args.tenant:
             tenant_uuid = self.get_tenant_uuid(self.app.client, parsed_args.tenant)
             body['tenant_uuid'] = tenant_uuid

@@ -20,7 +20,7 @@ class PolicyCreate(PolicyIdentifierMixin, TenantIdentifierMixin, Command):
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
         parser.add_argument('--description', help='the policy description')
-        parser.add_argument('--acl', nargs='+', help='acl to assign to the new policy')
+        parser.add_argument('--acl', nargs='+', default=[], help='acl to assign to the new policy')
         parser.add_argument('--or-show', action='store_true',
                             help='show the policy UUID if this policy name already exists')
         parser.add_argument('--tenant', help="The policy's tenant")

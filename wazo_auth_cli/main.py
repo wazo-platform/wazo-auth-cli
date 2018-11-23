@@ -72,11 +72,18 @@ class WazoAuthCLI(App):
 
         return self._client
 
+    @property
+    def client_without_token(self):
+        if not self._client:
+            self._client = Client(**self._auth_config)
+        return self._client
+
     def initialize_app(self, argv):
         self.LOG.debug('Wazo Auth CLI')
         self.LOG.debug('options=%s', self.options)
         conf = config.build(self.options)
         self.LOG.debug('Starting with config: %s', conf)
+        self._current_token = self.options.token
 
         self.LOG.debug('client args: %s', conf['auth'])
         self._auth_config = dict(conf['auth'])
