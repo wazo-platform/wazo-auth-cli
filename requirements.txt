@@ -2,5 +2,5 @@ cliff==1.7.0
 git+https://github.com/wazo-pbx/xivo-auth-client.git
 git+https://github.com/wazo-pbx/xivo-lib-python.git
 git+https://github.com/wazo-pbx/xivo-lib-rest-client.git
-requests==2.4.3
+requests==2.20.0
 pyaml
