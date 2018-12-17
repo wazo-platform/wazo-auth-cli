@@ -62,10 +62,10 @@ class WazoAuthCLI(App):
         if not self._current_token:
             self._backend = self._auth_config.pop('backend', None) or self._backend
             self._client = Client(**self._auth_config)
-            if not self._backend:
-                self.LOG.error('No auth backend specified. Use --backend or user a configuration file')
-                sys.exit(1)
-            token_data = self._client.token.new(self._backend, expiration=3600)
+            args = {'expiration': 3600}
+            if self._backend:
+                args['backend'] = self._backend
+            token_data = self._client.token.new(**args)
             self._current_token = token_data['token']
 
         self._client.set_token(self._current_token)
