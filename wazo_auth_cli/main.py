@@ -1,8 +1,9 @@
 # Copyright 2017-2018 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
-import sys
 import os
+import os.path
+import sys
 
 from cliff.app import App
 from cliff.commandmanager import CommandManager
@@ -30,7 +31,9 @@ class WazoAuthCLI(App):
 
     def build_option_parser(self, *args, **kwargs):
         parser = super(WazoAuthCLI, self).build_option_parser(*args, **kwargs)
-        parser.add_argument('--config', default=os.getenv('WAZO_AUTH_CLI_CONFIG', None),
+        config_path_from_env = os.getenv('WAZO_AUTH_CLI_CONFIG', None)
+        config_path_default = os.path.expanduser(os.path.join('~', '.config', 'wazo-auth-cli'))
+        parser.add_argument('--config', default=(config_path_from_env or config_path_default),
                             help='Extra configuration directory to override the system configuration')
         parser.add_argument('--hostname', help='The wazo-auth hostname')
         parser.add_argument('--port', help='The wazo-auth port')
