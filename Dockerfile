@@ -2,8 +2,8 @@ FROM python:3.5-slim-stretch
 
 MAINTAINER Wazo Maintainers <dev@wazo.community>
 
-ADD . /usr/src/xivo-auth-cli
-WORKDIR /usr/src/xivo-auth-cli
+ADD . /usr/src/wazo-auth-cli
+WORKDIR /usr/src/wazo-auth-cli
 RUN true \
     && apt-get update \
     && apt-get -yqq install git \
