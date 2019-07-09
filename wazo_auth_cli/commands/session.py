@@ -4,16 +4,30 @@
 from cliff.command import Command
 from cliff.lister import Lister
 
-from ..helpers import ListBuildingMixin
+from ..helpers import ListBuildingMixin, TenantIdentifierMixin
 
 
-class SessionList(ListBuildingMixin, Lister):
+class SessionList(TenantIdentifierMixin, ListBuildingMixin, Lister):
     "List sessions"
 
     _columns = ['uuid', 'tenant_uuid', 'user_uuid', 'mobile']
 
+    def get_parser(self, *args, **kwargs):
+        parser = super().get_parser(*args, **kwargs)
+        parser.add_argument('--recurse', help='Show sessions in all subtenants', action='store_true')
+        parser.add_argument('--tenant', help="Show sessions in a specific tenant")
+        return parser
+
     def take_action(self, parsed_args):
-        result = self.app.client.sessions.list()
+        kwargs = {
+            'recurse': parsed_args.recurse,
+        }
+
+        if parsed_args.tenant:
+            tenant_uuid = self.get_tenant_uuid(self.app.client, parsed_args.tenant)
+            kwargs['tenant_uuid'] = tenant_uuid
+
+        result = self.app.client.sessions.list(**kwargs)
         if not result['items']:
             return (), ()
 
