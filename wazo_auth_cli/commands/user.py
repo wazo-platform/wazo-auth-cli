@@ -178,7 +178,7 @@ class UserRemove(UserIdentifierMixin, PolicyIdentifierMixin, GroupIdentifierMixi
         self.app.client.users.remove_policy(uuid, policy_uuid)
 
     def _remove_group(self, uuid, parsed_args):
-        group_uuid = self.get_group_uuid(self.app.client, parsed_args.policy)
+        group_uuid = self.get_group_uuid(self.app.client, parsed_args.group)
         self.app.client.groups.remove_user(group_uuid, uuid)
 
 
