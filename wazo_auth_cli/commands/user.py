@@ -152,7 +152,7 @@ class UserList(TenantIdentifierMixin, ListBuildingMixin, Lister):
 
 
 class UserRemove(UserIdentifierMixin, PolicyIdentifierMixin, GroupIdentifierMixin, Command):
-    "Remove policy or/and group to user"
+    "Remove policy or/and group or/and session to user"
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
@@ -161,6 +161,8 @@ class UserRemove(UserIdentifierMixin, PolicyIdentifierMixin, GroupIdentifierMixi
                               help='The name or UUID of the policy to remove from this user')
         relation.add_argument('--group',
                               help='The name or UUID of the group to remove from this user')
+        relation.add_argument('--session',
+                              help='The UUID of the session to remove from this user')
         parser.add_argument('identifier', help='username or UUID')
         return parser
 
@@ -173,13 +175,19 @@ class UserRemove(UserIdentifierMixin, PolicyIdentifierMixin, GroupIdentifierMixi
         if parsed_args.group:
             return self._remove_group(uuid, parsed_args)
 
+        if parsed_args.session:
+            return self._remove_session(uuid, parsed_args)
+
     def _remove_policy(self, uuid, parsed_args):
         policy_uuid = self.get_policy_uuid(self.app.client, parsed_args.policy)
         self.app.client.users.remove_policy(uuid, policy_uuid)
 
     def _remove_group(self, uuid, parsed_args):
-        group_uuid = self.get_group_uuid(self.app.client, parsed_args.policy)
+        group_uuid = self.get_group_uuid(self.app.client, parsed_args.group)
         self.app.client.groups.remove_user(group_uuid, uuid)
+
+    def _remove_session(self, uuid, parsed_args):
+        self.app.client.users.remove_session(uuid, parsed_args.session)
 
 
 class UserShow(UserIdentifierMixin, Command):

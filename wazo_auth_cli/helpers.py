@@ -1,4 +1,4 @@
-# Copyright 2017-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2017-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from uuid import UUID
@@ -13,7 +13,7 @@ def is_uuid(string):
     return True
 
 
-class ListBuildingMixin(object):
+class ListBuildingMixin:
 
     _columns = []
     _removed_columns = []
@@ -32,7 +32,7 @@ class ListBuildingMixin(object):
         return results
 
 
-class TenantIdentifierMixin(object):
+class TenantIdentifierMixin:
 
     def get_tenant_uuid(self, client, identifier):
         if is_uuid(identifier):
@@ -45,7 +45,7 @@ class TenantIdentifierMixin(object):
         return result['items'][0]['uuid']
 
 
-class GroupIdentifierMixin(object):
+class GroupIdentifierMixin:
 
     def get_group_uuid(self, client, identifier):
         if is_uuid(identifier):
@@ -58,7 +58,7 @@ class GroupIdentifierMixin(object):
         return result['items'][0]['uuid']
 
 
-class UserIdentifierMixin(object):
+class UserIdentifierMixin:
 
     def get_user_uuid(self, client, identifier):
         if is_uuid(identifier):
@@ -71,7 +71,7 @@ class UserIdentifierMixin(object):
         return result['items'][0]['uuid']
 
 
-class PolicyIdentifierMixin(object):
+class PolicyIdentifierMixin:
 
     def get_policy_uuid(self, client, identifier):
         if is_uuid(identifier):
