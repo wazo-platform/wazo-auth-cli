@@ -1,6 +1,6 @@
 git+https://github.com/wazo-pbx/wazo-auth-client.git
 git+https://github.com/wazo-pbx/xivo-lib-python.git
 git+https://github.com/wazo-pbx/xivo-lib-rest-client.git
-cliff==1.7.0
-requests==2.21.0
+cliff==2.13.0
+requests==0.4.13
 pyaml
