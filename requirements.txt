@@ -1,6 +1,6 @@
-git+https://github.com/wazo-pbx/wazo-auth-client.git
-git+https://github.com/wazo-pbx/xivo-lib-python.git
-git+https://github.com/wazo-pbx/xivo-lib-rest-client.git
+https://github.com/wazo-pbx/wazo-auth-client/archive/buster.zip
+https://github.com/wazo-pbx/xivo-lib-python/archive/buster.zip
+https://github.com/wazo-pbx/xivo-lib-rest-client/archive/buster.zip
 cliff==2.13.0
 requests==2.21.0
 pyaml
