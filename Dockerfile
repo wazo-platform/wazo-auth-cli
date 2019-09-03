@@ -1,4 +1,4 @@
-FROM python:3.5-slim-stretch
+FROM python:3.5-slim-buster
 
 MAINTAINER Wazo Maintainers <dev@wazo.community>
 
