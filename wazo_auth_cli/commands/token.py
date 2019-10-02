@@ -60,6 +60,19 @@ class RefreshTokenList(Command):
         self.app.stdout.write(json.dumps(token, indent=True, sort_keys=True) + '\n')
 
 
+class RefreshTokenDelete(Command):
+    "Delete a refresh token"
+
+    def get_parser(self, *args, **kwargs):
+        parser = super().get_parser(*args, **kwargs)
+        parser.add_argument('--user_uuid', help='User UUID of the user or me')
+        parser.add_argument('--client_id', help='Client ID of the refresh token')
+        return parser
+
+    def take_action(self, parsed_args):
+        self.app.client.token.delete(user_uuid=parsed_args.user_uuid, client_id=parsed_args.client_id)
+
+
 class TokenRevoke(Command):
     "Revoke token"
 
