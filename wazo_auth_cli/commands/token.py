@@ -70,7 +70,7 @@ class RefreshTokenDelete(Command):
         return parser
 
     def take_action(self, parsed_args):
-        self.app.client.token.delete(user_uuid=parsed_args.user_uuid, client_id=parsed_args.client_id)
+        self.app.client.token.delete(parsed_args.user_uuid, parsed_args.client_id)
 
 
 class TokenRevoke(Command):
