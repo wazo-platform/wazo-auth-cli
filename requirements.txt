@@ -1,6 +1,6 @@
+https://github.com/wazo-platform/wazo-lib-rest-client/archive/master.zip
 https://github.com/wazo-platform/wazo-auth-client/archive/master.zip
 https://github.com/wazo-platform/xivo-lib-python/archive/master.zip
-https://github.com/wazo-platform/xivo-lib-rest-client/archive/master.zip
 cliff==2.13.0
 requests==2.21.0
 pyaml
