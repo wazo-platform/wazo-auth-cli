@@ -39,6 +39,7 @@ class WazoAuthCLI(App):
         parser.add_argument('--port', help='The wazo-auth port')
 
         https_verification = parser.add_mutually_exclusive_group()
+        https_verification.add_argument('--no-ssl', help='Don\'t use ssl')
         https_verification.add_argument('--verify', action='store_true',
                                         help='Verify the HTTPS certificate or not')
         https_verification.add_argument('--insecure', action='store_true',

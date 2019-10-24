@@ -1,4 +1,4 @@
-# Copyright 2017-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2017-2019 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
@@ -38,6 +38,8 @@ def _args_to_dict(parsed_args):
         logger.debug('setting %s = %s', config_name, value)
         auth_config[config_name] = value
 
+    if parsed_args.no_ssl:
+        auth_config['https'] = False
     if parsed_args.verify:
         auth_config['verify_certificate'] = True
     elif parsed_args.insecure:
