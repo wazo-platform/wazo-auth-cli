@@ -44,13 +44,6 @@ auth:
 If a similar file does not exists it can be recreated with the following commands:
 
 ```sh
-wazo-auth-bootstrap setup
-systemctl restart wazo-auth
-```
-
-To finish a bootstrap
-
-```sh
 wazo-auth-bootstrap complete
 ```
 
