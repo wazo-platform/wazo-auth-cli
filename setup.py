@@ -14,9 +14,7 @@ setup(
     url='http://wazo.community',
     packages=find_packages(),
     entry_points={
-        'console_scripts': [
-            'wazo-auth-cli = wazo_auth_cli.main:main',
-        ],
+        'console_scripts': ['wazo-auth-cli = wazo_auth_cli.main:main'],
         'wazo_auth_cli.commands': [
             'group_add = wazo_auth_cli.commands.group:GroupAdd',
             'group_create = wazo_auth_cli.commands.group:GroupCreate',

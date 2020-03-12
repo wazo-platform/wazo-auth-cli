@@ -12,7 +12,9 @@ class TokenCreate(Command):
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
         parser.add_argument('--expiration', help="Expiration of the token")
-        parser.add_argument('--refresh_token', help="The refresh token to renew the token")
+        parser.add_argument(
+            '--refresh_token', help="The refresh token to renew the token"
+        )
         parser.add_argument('--access_type', help="Access type: online or offline")
         parser.add_argument('--client_id', help="The client ID of the refresh token")
         return parser

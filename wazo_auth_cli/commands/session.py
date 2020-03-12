@@ -14,7 +14,9 @@ class SessionList(TenantIdentifierMixin, ListBuildingMixin, Lister):
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
-        parser.add_argument('--recurse', help='Show sessions in all subtenants', action='store_true')
+        parser.add_argument(
+            '--recurse', help='Show sessions in all subtenants', action='store_true'
+        )
         parser.add_argument('--tenant', help="Show sessions in a specific tenant")
         return parser
 

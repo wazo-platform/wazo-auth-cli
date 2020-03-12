@@ -20,7 +20,9 @@ class GroupAdd(GroupIdentifierMixin, UserIdentifierMixin, Command):
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
         relation = parser.add_mutually_exclusive_group(required=True)
-        relation.add_argument('--user', help='The username of UUID of the user to add to this group')
+        relation.add_argument(
+            '--user', help='The username of UUID of the user to add to this group'
+        )
         parser.add_argument('identifier', help='name of UUID of the group')
         return parser
 
@@ -41,7 +43,9 @@ class GroupRemove(GroupIdentifierMixin, UserIdentifierMixin, Command):
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
         relation = parser.add_mutually_exclusive_group(required=True)
-        relation.add_argument('--user', help='The username of UUID of the user to add to this group')
+        relation.add_argument(
+            '--user', help='The username of UUID of the user to add to this group'
+        )
         parser.add_argument('identifier', help='name of UUID of the group')
         return parser
 
@@ -67,9 +71,7 @@ class GroupCreate(TenantIdentifierMixin, Command):
 
     def take_action(self, parsed_args):
         self.app.LOG.debug(parsed_args)
-        body = dict(
-            name=parsed_args.name,
-        )
+        body = dict(name=parsed_args.name,)
 
         if parsed_args.tenant:
             tenant_uuid = self.get_tenant_uuid(self.app.client, parsed_args.tenant)
@@ -102,7 +104,9 @@ class GroupList(TenantIdentifierMixin, ListBuildingMixin, Lister):
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
-        parser.add_argument('--recurse', help='Show users in all subtenants', action='store_true')
+        parser.add_argument(
+            '--recurse', help='Show users in all subtenants', action='store_true'
+        )
         parser.add_argument('--tenant', help="Show users in a specific tenant")
         return parser
 
@@ -111,7 +115,9 @@ class GroupList(TenantIdentifierMixin, ListBuildingMixin, Lister):
         if parsed_args.recurse:
             kwargs['recurse'] = parsed_args.recurse
         if parsed_args.tenant:
-            kwargs['tenant_uuid'] = self.get_tenant_uuid(self.app.client, parsed_args.tenant)
+            kwargs['tenant_uuid'] = self.get_tenant_uuid(
+                self.app.client, parsed_args.tenant
+            )
 
         result = self.app.client.groups.list(**kwargs)
         if not result['items']:

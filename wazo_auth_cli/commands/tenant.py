@@ -15,8 +15,9 @@ class TenantAdd(TenantIdentifierMixin, UserIdentifierMixin, Command):
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
         relation = parser.add_mutually_exclusive_group(required=True)
-        relation.add_argument('--user',
-                              help='The username or UUID of the user to add to this tenant')
+        relation.add_argument(
+            '--user', help='The username or UUID of the user to add to this tenant'
+        )
         parser.add_argument('identifier', help='name or UUID of the tenant')
         return parser
 
@@ -61,7 +62,9 @@ class TenantDelete(TenantIdentifierMixin, UserIdentifierMixin, Command):
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
-        parser.add_argument('identifier', help="The tenant or UUID of the tenant to delete")
+        parser.add_argument(
+            'identifier', help="The tenant or UUID of the tenant to delete"
+        )
         return parser
 
     def take_action(self, parsed_args):
@@ -76,8 +79,9 @@ class TenantRemove(TenantIdentifierMixin, UserIdentifierMixin, Command):
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
         relation = parser.add_mutually_exclusive_group(required=True)
-        relation.add_argument('--user',
-                              help='The username or UUID of the user to remove from this tenant')
+        relation.add_argument(
+            '--user', help='The username or UUID of the user to remove from this tenant'
+        )
         parser.add_argument('identifier', help='name or UUID of the tenant')
         return parser
 
