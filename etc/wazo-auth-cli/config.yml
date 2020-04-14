@@ -4,4 +4,5 @@ extra_config_files: '/etc/wazo-auth-cli/conf.d'
 auth:
   host: localhost
   port: 9497
-  verify_certificate: /usr/share/xivo-certs/server.crt
+  prefix: null
+  https: false

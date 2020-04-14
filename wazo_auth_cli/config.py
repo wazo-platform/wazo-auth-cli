@@ -12,7 +12,7 @@ _APP_NAME = 'wazo-auth-cli'
 _DEFAULT_CONFIG = {
     'config_file': '/etc/{}/config.yml'.format(_APP_NAME),
     'extra_config_files': '/etc/{}/conf.d/'.format(_APP_NAME),
-    'auth': {'host': 'localhost', 'port': 9497, 'verify_certificate': True},
+    'auth': {'host': 'localhost', 'port': 9497, 'prefix': None, 'https': False},
 }
 
 _AUTH_ARGS_TO_FIELDS_MAP = {
@@ -33,6 +33,8 @@ def _args_to_dict(parsed_args):
         logger.debug('setting %s = %s', config_name, value)
         auth_config[config_name] = value
 
+    if parsed_args.ssl:
+        auth_config['https'] = True
     if parsed_args.no_ssl:
         auth_config['https'] = False
     if parsed_args.verify:
