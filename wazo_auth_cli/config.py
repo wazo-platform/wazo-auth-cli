@@ -1,4 +1,4 @@
-# Copyright 2017-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2017-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
@@ -9,24 +9,23 @@ from xivo.config_helper import parse_config_dir, read_config_file_hierarchy
 logger = logging.getLogger(__name__)
 
 _APP_NAME = 'wazo-auth-cli'
-_DEFAULT_AUTH_CONFIG = dict(host='localhost', port=9497, verify_certificate=True,)
-_DEFAULT_CONFIG = dict(
-    config_file='/etc/{}/config.yml'.format(_APP_NAME),
-    extra_config_files='/etc/{}/conf.d/'.format(_APP_NAME),
-    auth=_DEFAULT_AUTH_CONFIG,
-)
+_DEFAULT_CONFIG = {
+    'config_file': '/etc/{}/config.yml'.format(_APP_NAME),
+    'extra_config_files': '/etc/{}/conf.d/'.format(_APP_NAME),
+    'auth': {'host': 'localhost', 'port': 9497, 'verify_certificate': True},
+}
 
-_AUTH_ARGS_TO_FIELDS_MAP = dict(
-    auth_username='username',
-    hostname='host',
-    auth_password='password',
-    port='port',
-    backend='backend',
-)
+_AUTH_ARGS_TO_FIELDS_MAP = {
+    'auth_username': 'username',
+    'hostname': 'host',
+    'auth_password': 'password',
+    'port': 'port',
+    'backend': 'backend',
+}
 
 
 def _args_to_dict(parsed_args):
-    auth_config = dict()
+    auth_config = {}
     for arg_name, config_name in _AUTH_ARGS_TO_FIELDS_MAP.items():
         value = getattr(parsed_args, arg_name, None)
         if value is None:
@@ -41,7 +40,7 @@ def _args_to_dict(parsed_args):
     elif parsed_args.cacert:
         auth_config['verify_certificate'] = parsed_args.cacert
 
-    config = dict(auth=auth_config)
+    config = {'auth': auth_config}
     return config
 
 
