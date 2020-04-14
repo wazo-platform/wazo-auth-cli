@@ -1,4 +1,4 @@
-# Copyright 2017-2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2017-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import json
@@ -67,7 +67,7 @@ class UserCreate(TenantIdentifierMixin, Command):
 
     def take_action(self, parsed_args):
         self.app.LOG.debug(parsed_args)
-        body = dict(username=parsed_args.name, password=parsed_args.password,)
+        body = {'username': parsed_args.name, 'password': parsed_args.password}
         if parsed_args.uuid:
             body['uuid'] = parsed_args.uuid
         if parsed_args.email:

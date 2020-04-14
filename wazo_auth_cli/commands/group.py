@@ -1,4 +1,4 @@
-# Copyright 2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2018-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import json
@@ -71,7 +71,7 @@ class GroupCreate(TenantIdentifierMixin, Command):
 
     def take_action(self, parsed_args):
         self.app.LOG.debug(parsed_args)
-        body = dict(name=parsed_args.name,)
+        body = {'name': parsed_args.name}
 
         if parsed_args.tenant:
             tenant_uuid = self.get_tenant_uuid(self.app.client, parsed_args.tenant)
