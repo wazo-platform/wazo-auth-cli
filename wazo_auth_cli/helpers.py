@@ -33,7 +33,6 @@ class ListBuildingMixin:
 
 
 class TenantIdentifierMixin:
-
     def get_tenant_uuid(self, client, identifier):
         if is_uuid(identifier):
             return identifier
@@ -46,7 +45,6 @@ class TenantIdentifierMixin:
 
 
 class GroupIdentifierMixin:
-
     def get_group_uuid(self, client, identifier):
         if is_uuid(identifier):
             return identifier
@@ -59,7 +57,6 @@ class GroupIdentifierMixin:
 
 
 class UserIdentifierMixin:
-
     def get_user_uuid(self, client, identifier):
         if is_uuid(identifier):
             return identifier
@@ -72,7 +69,6 @@ class UserIdentifierMixin:
 
 
 class PolicyIdentifierMixin:
-
     def get_policy_uuid(self, client, identifier):
         if is_uuid(identifier):
             return identifier

@@ -15,16 +15,20 @@ from ..helpers import (
 )
 
 
-class UserAdd(UserIdentifierMixin, PolicyIdentifierMixin, GroupIdentifierMixin, Command):
+class UserAdd(
+    UserIdentifierMixin, PolicyIdentifierMixin, GroupIdentifierMixin, Command
+):
     "Add policy or/and group to a user"
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
         relation = parser.add_mutually_exclusive_group(required=True)
-        relation.add_argument('--policy',
-                              help='The name or UUID of the policy to add to this user')
-        relation.add_argument('--group',
-                              help='The name or UUID of the group to add to this user')
+        relation.add_argument(
+            '--policy', help='The name or UUID of the policy to add to this user'
+        )
+        relation.add_argument(
+            '--group', help='The name or UUID of the group to add to this user'
+        )
         parser.add_argument('identifier', help='username or UUID')
         return parser
 
@@ -63,10 +67,7 @@ class UserCreate(TenantIdentifierMixin, Command):
 
     def take_action(self, parsed_args):
         self.app.LOG.debug(parsed_args)
-        body = dict(
-            username=parsed_args.name,
-            password=parsed_args.password,
-        )
+        body = dict(username=parsed_args.name, password=parsed_args.password,)
         if parsed_args.uuid:
             body['uuid'] = parsed_args.uuid
         if parsed_args.email:
@@ -92,7 +93,9 @@ class UserDelete(UserIdentifierMixin, Command):
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
-        parser.add_argument('identifier', help="The username or UUID of the user to delete")
+        parser.add_argument(
+            'identifier', help="The username or UUID of the user to delete"
+        )
         return parser
 
     def take_action(self, parsed_args):
@@ -109,7 +112,9 @@ class UserList(TenantIdentifierMixin, ListBuildingMixin, Lister):
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
-        parser.add_argument('--recurse', help='Show users in all subtenants', action='store_true')
+        parser.add_argument(
+            '--recurse', help='Show users in all subtenants', action='store_true'
+        )
         parser.add_argument('--tenant', help="Show users in a specific tenant")
         return parser
 
@@ -133,7 +138,9 @@ class UserList(TenantIdentifierMixin, ListBuildingMixin, Lister):
 
     def _add_email_column(self, items):
         for item in items:
-            email = self._main_email(item['emails']) or self._first_email(item['emails'])
+            email = self._main_email(item['emails']) or self._first_email(
+                item['emails']
+            )
             item['email'] = email
         return items
 
@@ -151,18 +158,23 @@ class UserList(TenantIdentifierMixin, ListBuildingMixin, Lister):
         return ''
 
 
-class UserRemove(UserIdentifierMixin, PolicyIdentifierMixin, GroupIdentifierMixin, Command):
+class UserRemove(
+    UserIdentifierMixin, PolicyIdentifierMixin, GroupIdentifierMixin, Command
+):
     "Remove policy or/and group or/and session to user"
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
         relation = parser.add_mutually_exclusive_group(required=True)
-        relation.add_argument('--policy',
-                              help='The name or UUID of the policy to remove from this user')
-        relation.add_argument('--group',
-                              help='The name or UUID of the group to remove from this user')
-        relation.add_argument('--session',
-                              help='The UUID of the session to remove from this user')
+        relation.add_argument(
+            '--policy', help='The name or UUID of the policy to remove from this user'
+        )
+        relation.add_argument(
+            '--group', help='The name or UUID of the group to remove from this user'
+        )
+        relation.add_argument(
+            '--session', help='The UUID of the session to remove from this user'
+        )
         parser.add_argument('identifier', help='username or UUID')
         return parser
 

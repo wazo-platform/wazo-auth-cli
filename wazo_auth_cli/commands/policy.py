@@ -20,9 +20,14 @@ class PolicyCreate(PolicyIdentifierMixin, TenantIdentifierMixin, Command):
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
         parser.add_argument('--description', help='the policy description')
-        parser.add_argument('--acl', nargs='+', default=[], help='acl to assign to the new policy')
-        parser.add_argument('--or-show', action='store_true',
-                            help='show the policy UUID if this policy name already exists')
+        parser.add_argument(
+            '--acl', nargs='+', default=[], help='acl to assign to the new policy'
+        )
+        parser.add_argument(
+            '--or-show',
+            action='store_true',
+            help='show the policy UUID if this policy name already exists',
+        )
         parser.add_argument('--tenant', help="The policy's tenant")
         parser.add_argument('name', help='the policy name')
         return parser
@@ -57,7 +62,9 @@ class PolicyDelete(PolicyIdentifierMixin, Command):
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
-        parser.add_argument('identifier', help="The name or UUID of the policy to delete")
+        parser.add_argument(
+            'identifier', help="The name or UUID of the policy to delete"
+        )
         return parser
 
     def take_action(self, parsed_args):
@@ -74,7 +81,9 @@ class PolicyList(ListBuildingMixin, TenantIdentifierMixin, Lister):
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
-        parser.add_argument('--recurse', help='Show policies in all subtenants', action='store_true')
+        parser.add_argument(
+            '--recurse', help='Show policies in all subtenants', action='store_true'
+        )
         parser.add_argument('--tenant', help="Show policies in a specific tenant")
         return parser
 

@@ -9,11 +9,7 @@ from xivo.config_helper import parse_config_dir, read_config_file_hierarchy
 logger = logging.getLogger(__name__)
 
 _APP_NAME = 'wazo-auth-cli'
-_DEFAULT_AUTH_CONFIG = dict(
-    host='localhost',
-    port=9497,
-    verify_certificate=True,
-)
+_DEFAULT_AUTH_CONFIG = dict(host='localhost', port=9497, verify_certificate=True,)
 _DEFAULT_CONFIG = dict(
     config_file='/etc/{}/config.yml'.format(_APP_NAME),
     extra_config_files='/etc/{}/conf.d/'.format(_APP_NAME),
@@ -59,6 +55,10 @@ def _read_user_config(parsed_args):
 def build(parsed_args):
     cli_config = _args_to_dict(parsed_args)
     user_file_config = _read_user_config(parsed_args)
-    system_file_config = read_config_file_hierarchy(ChainMap(cli_config, user_file_config, _DEFAULT_CONFIG))
-    final_config = ChainMap(cli_config, user_file_config, system_file_config, _DEFAULT_CONFIG)
+    system_file_config = read_config_file_hierarchy(
+        ChainMap(cli_config, user_file_config, _DEFAULT_CONFIG)
+    )
+    final_config = ChainMap(
+        cli_config, user_file_config, system_file_config, _DEFAULT_CONFIG
+    )
     return final_config
