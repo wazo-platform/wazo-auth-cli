@@ -1,4 +1,4 @@
-# Copyright 2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2018-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import json
@@ -120,6 +120,6 @@ class TenantShow(TenantIdentifierMixin, UserIdentifierMixin, Command):
         return parser
 
     def take_action(self, parsed_args):
-        uuid = self.get_user_uuid(self.app.client, parsed_args.identifier)
+        uuid = self.get_tenant_uuid(self.app.client, parsed_args.identifier)
         tenant = self.app.client.tenants.get(uuid)
         self.app.stdout.write(json.dumps(tenant, indent=True, sort_keys=True) + '\n')
