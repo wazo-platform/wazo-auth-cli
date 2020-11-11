@@ -115,4 +115,5 @@ class PolicyShow(PolicyIdentifierMixin, Command):
     def take_action(self, parsed_args):
         uuid = self.get_policy_uuid(self.app.client, parsed_args.identifier)
         policy = self.app.client.policies.get(uuid)
+        del policy['acl_templates']
         self.app.stdout.write(json.dumps(policy, indent=True, sort_keys=True) + '\n')
