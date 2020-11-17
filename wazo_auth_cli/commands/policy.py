@@ -1,4 +1,4 @@
-# Copyright 2017-2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2017-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import json
@@ -38,7 +38,7 @@ class PolicyCreate(PolicyIdentifierMixin, TenantIdentifierMixin, Command):
         body = {
             'name': parsed_args.name,
             'description': parsed_args.description,
-            'acl_templates': parsed_args.acl,
+            'acl': parsed_args.acl,
         }
 
         if parsed_args.tenant:
@@ -77,7 +77,7 @@ class PolicyList(ListBuildingMixin, TenantIdentifierMixin, Lister):
     "List all policies available"
 
     _columns = ['uuid', 'name', 'description', 'tenant_uuid']
-    _removed_columns = ['acl_templates']
+    _removed_columns = ['acl_templates', 'acl']
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
@@ -115,4 +115,5 @@ class PolicyShow(PolicyIdentifierMixin, Command):
     def take_action(self, parsed_args):
         uuid = self.get_policy_uuid(self.app.client, parsed_args.identifier)
         policy = self.app.client.policies.get(uuid)
+        del policy['acl_templates']
         self.app.stdout.write(json.dumps(policy, indent=True, sort_keys=True) + '\n')
