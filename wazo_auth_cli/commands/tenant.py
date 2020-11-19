@@ -99,7 +99,8 @@ class TenantRemove(TenantIdentifierMixin, UserIdentifierMixin, Command):
 class TenantList(ListBuildingMixin, Lister):
     "List tenants"
 
-    _columns = ['uuid', 'name', 'contact', 'phone', 'address', 'parent_uuid']
+    _columns = ['uuid', 'name', 'contact', 'phone', 'parent_uuid']
+    _removed_columns = ['address']
 
     def take_action(self, parsed_args):
         result = self.app.client.tenants.list()
