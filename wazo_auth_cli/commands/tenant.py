@@ -72,7 +72,7 @@ class TenantDelete(TenantIdentifierMixin, UserIdentifierMixin, Command):
         return parser
 
     def take_action(self, parsed_args):
-        uuid = self.get_user_uuid(self.app.client, parsed_args.identifier)
+        uuid = self.get_tenant_uuid(self.app.client, parsed_args.identifier)
         self.app.LOG.debug('Deleting tenant %s', uuid)
         self.app.client.tenants.delete(uuid)
 
