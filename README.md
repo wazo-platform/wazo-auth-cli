@@ -109,3 +109,4 @@ wazo-auth-cli tenant create --parent mytenant othertenant
 ```sh
 wazo-auth-cli --help
 ```
+
