@@ -2,6 +2,8 @@ FROM python:3.5-slim-buster
 
 MAINTAINER Wazo Maintainers <dev@wazo.community>
 
+ENV WAZO_AUTH_CLI_CONFIG=/etc/wazo-auth-cli
+
 ADD . /usr/src/wazo-auth-cli
 WORKDIR /usr/src/wazo-auth-cli
 RUN true \
