@@ -16,11 +16,11 @@ RUN python setup.py install
 FROM python:3.7-slim-buster AS build-image
 COPY --from=compile-image /opt/venv /opt/venv
 
-ENV WAZO_AUTH_CLI_CONFIG=/etc/wazo-auth-cli
-
 COPY ./etc/wazo-auth-cli /etc/wazo-auth-cli
 RUN true \
-    && mkdir -p /etc/wazo-auth-cli/conf.d
+    && mkdir -p /etc/wazo-auth-cli/conf.d \
+    # create empty config dir to avoid override system config
+    && mkdir -p /root/.config/wazo-auth-cli
 
 # Activate virtual env
 ENV PATH="/opt/venv/bin:$PATH"
