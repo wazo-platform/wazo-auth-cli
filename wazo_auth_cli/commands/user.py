@@ -1,10 +1,12 @@
-# Copyright 2017-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2017-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import os
 import json
 
 from cliff.command import Command
 from cliff.lister import Lister
+from getpass import getpass
 
 from ..helpers import (
     GroupIdentifierMixin,
@@ -218,3 +220,29 @@ class UserShow(UserIdentifierMixin, Command):
         user['groups'] = self.app.client.users.get_groups(uuid)['items']
         user['sessions'] = self.app.client.users.get_sessions(uuid)['items']
         self.app.stdout.write(json.dumps(user, indent=True, sort_keys=True) + '\n')
+
+
+class UserSetPassword(UserIdentifierMixin, Command):
+    """Set password for a user. Password is prompted or taken
+    from env variable WAZO_AUTH_CLI_USER_PASSWORD."""
+
+    password_env_variable = 'WAZO_AUTH_CLI_USER_PASSWORD'
+
+    def get_parser(self, *args, **kwargs):
+        parser = super().get_parser(*args, **kwargs)
+        parser.add_argument('identifier', help='username or UUID')
+        return parser
+
+    def take_action(self, parsed_args):
+        uuid = self.get_user_uuid(self.app.client, parsed_args.identifier)
+        try:
+            secret = os.environ[self.password_env_variable]
+        except KeyError:
+            secret = getpass(f'Password for user {parsed_args.identifier}: ')
+        else:
+            self.app.stdout.write(
+                f'Setting password for user {parsed_args.identifier} '
+                f'from env variable {self.password_env_variable}...\n'
+            )
+        self.app.client.users.set_password(uuid, secret)
+        self.app.stdout.write('Done.\n')
