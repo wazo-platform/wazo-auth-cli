@@ -96,6 +96,32 @@ class UserCreate(TenantIdentifierMixin, Command):
         self.app.stdout.write(user['uuid'] + '\n')
 
 
+class UserUpdate(UserIdentifierMixin, Command):
+    "Update user"
+
+    def get_parser(self, *args, **kwargs):
+        parser = super().get_parser(*args, **kwargs)
+        parser.add_argument(
+            'identifier', help="The username or UUID of the user to update"
+        )
+        parser.add_argument('--enable', action='store_true', help="Enable the login")
+        parser.add_argument('--disable', action='store_true', help="Disable the login")
+        return parser
+
+    def take_action(self, parsed_args):
+        body = {}
+        if parsed_args.enable:
+            body['enabled'] = True
+        if parsed_args.disable:
+            body['enabled'] = False
+
+        uuid = self.get_user_uuid(self.app.client, parsed_args.identifier)
+        self.app.LOG.debug('Updating user %s', uuid)
+        user = self.app.client.users.get(uuid)
+        user.update(body)
+        self.app.client.users.edit(uuid, **user)
+
+
 class UserDelete(UserIdentifierMixin, Command):
     "Delete user"
 
