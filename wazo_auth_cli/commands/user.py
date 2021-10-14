@@ -64,6 +64,8 @@ class UserCreate(TenantIdentifierMixin, Command):
         parser.add_argument('--lastname', help="The user's lastname")
         parser.add_argument('--purpose', help="The user's purpose")
         parser.add_argument('--tenant', help="The user's tenant")
+        parser.add_argument('--enable', action='store_true', help="Enable the login")
+        parser.add_argument('--disable', action='store_true', help="Disable the login")
         parser.add_argument('name', help="the user's username")
         return parser
 
@@ -83,6 +85,10 @@ class UserCreate(TenantIdentifierMixin, Command):
         if parsed_args.tenant:
             tenant_uuid = self.get_tenant_uuid(self.app.client, parsed_args.tenant)
             body['tenant_uuid'] = tenant_uuid
+        if parsed_args.enable:
+            body['enabled'] = True
+        if parsed_args.disable:
+            body['enabled'] = False
 
         self.app.LOG.debug('Creating user %s', body)
         user = self.app.client.users.new(**body)
