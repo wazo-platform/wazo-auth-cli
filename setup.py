@@ -28,6 +28,7 @@ setup(
             'policy_show = wazo_auth_cli.commands.policy:PolicyShow',
             'user_add = wazo_auth_cli.commands.user:UserAdd',
             'user_create = wazo_auth_cli.commands.user:UserCreate',
+            'user_update = wazo_auth_cli.commands.user:UserUpdate',
             'user_delete = wazo_auth_cli.commands.user:UserDelete',
             'user_list = wazo_auth_cli.commands.user:UserList',
             'user_remove = wazo_auth_cli.commands.user:UserRemove',
