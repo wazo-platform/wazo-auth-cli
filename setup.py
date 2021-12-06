@@ -36,6 +36,7 @@ setup(
             'user_show = wazo_auth_cli.commands.user:UserShow',
             'session_list = wazo_auth_cli.commands.session:SessionList',
             'session_delete = wazo_auth_cli.commands.session:SessionDelete',
+            'session_show = wazo_auth_cli.commands.session:SessionShow',
             'tenant_add = wazo_auth_cli.commands.tenant:TenantAdd',
             'tenant_create = wazo_auth_cli.commands.tenant:TenantCreate',
             'tenant_remove = wazo_auth_cli.commands.tenant:TenantRemove',

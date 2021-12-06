@@ -1,5 +1,7 @@
-# Copyright 2019 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
+
+import json
 
 from cliff.command import Command
 from cliff.lister import Lister
@@ -50,3 +52,21 @@ class SessionDelete(Command):
         session_uuid = parsed_args.identifier
         self.app.LOG.debug('Deleting session %s', session_uuid)
         self.app.client.sessions.delete(session_uuid)
+
+
+class SessionShow(Command):
+    "Show session informations"
+
+    def get_parser(self, *args, **kwargs):
+        parser = super().get_parser(*args, **kwargs)
+        parser.add_argument('identifier', help='session UUID')
+        return parser
+
+    def take_action(self, parsed_args):
+        sessions = self.app.client.sessions.list(recurse=True)
+        for session in sessions['items']:
+            if session['uuid'] == parsed_args.identifier:
+                self.app.stdout.write(
+                    json.dumps(session, indent=True, sort_keys=True) + '\n'
+                )
+                break
