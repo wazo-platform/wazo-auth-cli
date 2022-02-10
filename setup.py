@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright 2017-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2017-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from setuptools import setup
@@ -22,6 +22,9 @@ setup(
             'group_show = wazo_auth_cli.commands.group:GroupShow',
             'group_list = wazo_auth_cli.commands.group:GroupList',
             'group_remove = wazo_auth_cli.commands.group:GroupRemove',
+            'ldap_config_update = wazo_auth_cli.commands.ldap_config:LDAPConfigUpdate',
+            'ldap_config_show = wazo_auth_cli.commands.ldap_config:LDAPConfigShow',
+            'ldap_config_delete = wazo_auth_cli.commands.ldap_config:LDAPConfigDelete',
             'policy_create = wazo_auth_cli.commands.policy:PolicyCreate',
             'policy_delete = wazo_auth_cli.commands.policy:PolicyDelete',
             'policy_list = wazo_auth_cli.commands.policy:PolicyList',
