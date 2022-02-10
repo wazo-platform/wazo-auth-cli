@@ -1,4 +1,4 @@
-# Copyright 2017-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2017-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import json
@@ -17,6 +17,7 @@ class TokenCreate(Command):
         )
         parser.add_argument('--access_type', help="Access type: online or offline")
         parser.add_argument('--client_id', help="The client ID of the refresh token")
+        parser.add_argument('--tenant_id', help="The tenant ID of the ldap backend")
         parser.add_argument(
             '--mobile', help='To create a mobile session', action='store_true'
         )
@@ -34,6 +35,8 @@ class TokenCreate(Command):
             params['refresh_token'] = parsed_args.refresh_token
         if parsed_args.client_id:
             params['client_id'] = parsed_args.client_id
+        if parsed_args.tenant_id:
+            params['tenant_id'] = parsed_args.tenant_id
         if parsed_args.mobile:
             params['session_type'] = 'mobile'
         token_data = self.app.client.token.new(**params)
