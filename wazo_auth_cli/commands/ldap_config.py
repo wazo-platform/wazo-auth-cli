@@ -32,6 +32,7 @@ class LDAPConfigUpdate(TenantIdentifierMixin, Command):
         parser.add_argument(
             'user_email_attribute', help='The email attribute in ldap schema'
         )
+        parser.add_argument('--search_filters', help='User search filters')
         parser.add_argument('--tenant', help="The LDAP config's tenant")
         return parser
 
@@ -55,6 +56,8 @@ class LDAPConfigUpdate(TenantIdentifierMixin, Command):
             params['user_login_attribute'] = parsed_args.user_login_attribute
         if parsed_args.user_email_attribute:
             params['user_email_attribute'] = parsed_args.user_email_attribute
+        if parsed_args.search_filters:
+            params['search_filters'] = parsed_args.search_filters
         if parsed_args.tenant:
             tenant_uuid = self.get_tenant_uuid(self.app.client, parsed_args.tenant)
             params['tenant_uuid'] = tenant_uuid
