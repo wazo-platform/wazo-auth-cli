@@ -13,8 +13,8 @@ class LDAPConfigUpdate(TenantIdentifierMixin, Command):
 
     def get_parser(self, *args, **kwargs):
         parser = super().get_parser(*args, **kwargs)
-        parser.add_argument('--host', help="Host of the ldap server")
-        parser.add_argument('--port', help="Port of the ldap server")
+        parser.add_argument('host', help="Host of the ldap server")
+        parser.add_argument('port', help="Port of the ldap server")
         parser.add_argument('--protocol_version', help="Version of ldap protocol")
         parser.add_argument('--protocol_security', help="Encryption options")
         parser.add_argument(
@@ -24,13 +24,13 @@ class LDAPConfigUpdate(TenantIdentifierMixin, Command):
             '--bind_password', help="The password of the service account"
         )
         parser.add_argument(
-            '--user_base_dn', help='The base DN in which users are located'
+            'user_base_dn', help='The base DN in which users are located'
         )
         parser.add_argument(
-            '--user_login_attribute', help='The attribute that identify users'
+            'user_login_attribute', help='The attribute that identify users'
         )
         parser.add_argument(
-            '--user_email_attribute', help='The email attribute in ldap schema'
+            'user_email_attribute', help='The email attribute in ldap schema'
         )
         parser.add_argument('--tenant', help="The LDAP config's tenant")
         return parser
