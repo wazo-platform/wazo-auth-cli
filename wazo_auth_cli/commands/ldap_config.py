@@ -62,7 +62,7 @@ class LDAPConfigUpdate(TenantIdentifierMixin, Command):
             tenant_uuid = self.get_tenant_uuid(self.app.client, parsed_args.tenant)
             params['tenant_uuid'] = tenant_uuid
 
-        config_ldap = self.app.client.ldap_config.create(
+        config_ldap = self.app.client.ldap_config.update(
             params, tenant_uuid=params.get('tenant_uuid')
         )
         self.app.LOG.info(config_ldap)
