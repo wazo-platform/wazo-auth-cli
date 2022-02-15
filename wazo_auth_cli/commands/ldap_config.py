@@ -87,7 +87,7 @@ class LDAPConfigShow(TenantIdentifierMixin, Command):
         )
 
 
-class LDAPConfigDelete(Command):
+class LDAPConfigDelete(TenantIdentifierMixin, Command):
     """Delete an ldap config"""
 
     def get_parser(self, *args, **kwargs):
