@@ -1,4 +1,4 @@
-FROM python:3.7-slim-buster AS compile-image
+FROM python:3.9-slim-bullseye AS compile-image
 LABEL maintainer="Wazo Maintainers <dev@wazo.community>"
 
 RUN python -m venv /opt/venv
@@ -13,7 +13,7 @@ COPY setup.py /usr/src/wazo-auth-cli/
 COPY wazo_auth_cli /usr/src/wazo-auth-cli/wazo_auth_cli
 RUN python setup.py install
 
-FROM python:3.7-slim-buster AS build-image
+FROM python:3.9-slim-bullseye AS build-image
 COPY --from=compile-image /opt/venv /opt/venv
 
 COPY ./etc/wazo-auth-cli /etc/wazo-auth-cli
