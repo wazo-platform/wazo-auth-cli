@@ -2,9 +2,9 @@ Source: wazo-auth-cli
 Section: python
 Priority: extra
 Maintainer: Wazo Maintainers <dev+pkg@wazo.community>
-Build-Depends: debhelper (>= 9), dh-python, python3-all, python3-setuptools
+Build-Depends: debhelper (>= 12), dh-python, python3-all, python3-setuptools
 Standards-Version: 3.9.6
-X-Python3-Version: >= 3.4
+X-Python3-Version: >= 3.9
 
 Package: wazo-auth-cli
 Architecture: all
