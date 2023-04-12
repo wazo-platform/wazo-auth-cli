@@ -41,7 +41,7 @@ auth:
   backend: wazo_user
 ```
 
-If a similar file does not exists it can be recreated with the following commands:
+If a similar file does not exist, it can be recreated with the following command:
 
 ```sh
 wazo-auth-bootstrap complete
