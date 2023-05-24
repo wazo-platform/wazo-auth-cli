@@ -1,4 +1,4 @@
-# Copyright 2017-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2017-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
@@ -56,7 +56,7 @@ class UserCreate(TenantIdentifierMixin, Command):
     "Add new user"
 
     def get_parser(self, prog_name):
-        parser = super(UserCreate, self).get_parser(prog_name)
+        parser = super().get_parser(prog_name)
         parser.add_argument('--uuid', help="The user's UUID when matching a PBX user")
         parser.add_argument('--password', help="the user's password", required=True)
         parser.add_argument('--email', help="the user's main email address")

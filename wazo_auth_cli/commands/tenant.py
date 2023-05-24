@@ -1,4 +1,4 @@
-# Copyright 2018-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2018-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import json
@@ -36,7 +36,7 @@ class TenantCreate(TenantIdentifierMixin, Command):
     "Create new tenant"
 
     def get_parser(self, prog_name):
-        parser = super(TenantCreate, self).get_parser(prog_name)
+        parser = super().get_parser(prog_name)
         parser.add_argument('--parent', help="The tenant's parent name or UUID")
         parser.add_argument('--uuid', help="Force the tenant's UUID (not recommended)")
         parser.add_argument('name', help="the tenant's name")
