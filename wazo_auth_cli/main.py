@@ -30,7 +30,7 @@ class WazoAuthCLI(App):
         self._backend = None
 
     def build_option_parser(self, *args, **kwargs):
-        parser = super(WazoAuthCLI, self).build_option_parser(*args, **kwargs)
+        parser = super().build_option_parser(*args, **kwargs)
         config_path_from_env = os.getenv('WAZO_AUTH_CLI_CONFIG', None)
         config_path_default = os.path.expanduser(
             os.path.join('~', '.config', 'wazo-auth-cli')

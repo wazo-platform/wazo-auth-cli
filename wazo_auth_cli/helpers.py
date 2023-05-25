@@ -38,7 +38,7 @@ class TenantIdentifierMixin:
 
         result = client.tenants.list(name=identifier)
         if not result['items']:
-            raise Exception('Unknown tenant "{}"'.format(identifier))
+            raise Exception(f'Unknown tenant "{identifier}"')
 
         return result['items'][0]['uuid']
 
@@ -50,7 +50,7 @@ class GroupIdentifierMixin:
 
         result = client.groups.list(name=identifier)
         if not result['items']:
-            raise Exception('Unknown group "{}"'.format(identifier))
+            raise Exception(f'Unknown group "{identifier}"')
 
         return result['items'][0]['uuid']
 
@@ -62,7 +62,7 @@ class UserIdentifierMixin:
 
         result = client.users.list(username=identifier, recurse=True)
         if not result['items']:
-            raise Exception('Unknown user "{}"'.format(identifier))
+            raise Exception(f'Unknown user "{identifier}"')
 
         return result['items'][0]['uuid']
 
@@ -75,10 +75,10 @@ class PolicyIdentifierMixin:
         # TODO: update to use name=identifier once the client implements it and remove the loop
         result = client.policies.list(search=identifier, recurse=True)
         if not result['items']:
-            raise Exception('Unknown policy "{}"'.format(identifier))
+            raise Exception(f'Unknown policy "{identifier}"')
 
         for item in result['items']:
             if item['name'] == identifier:
                 return item['uuid']
 
-        raise Exception('Unknown policy "{}"'.format(identifier))
+        raise Exception(f'Unknown policy "{identifier}"')

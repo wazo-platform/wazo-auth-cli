@@ -1,4 +1,4 @@
-# Copyright 2018-2020 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2018-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import json
@@ -64,7 +64,7 @@ class GroupCreate(TenantIdentifierMixin, Command):
     "Create new group"
 
     def get_parser(self, prog_name):
-        parser = super(GroupCreate, self).get_parser(prog_name)
+        parser = super().get_parser(prog_name)
         parser.add_argument('name', help="the group's name")
         parser.add_argument('--tenant', help="The user's tenant")
         return parser
