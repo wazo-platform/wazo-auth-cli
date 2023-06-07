@@ -2,8 +2,7 @@
 # Copyright 2017-2022 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from setuptools import setup
-from setuptools import find_packages
+from setuptools import setup, find_packages
 
 
 setup(
@@ -53,4 +52,11 @@ setup(
             'token_revoke = wazo_auth_cli.commands.token:TokenRevoke',
         ],
     },
+    install_requires=[
+        "wazo-auth-client@git+https://github.com/wazo-platform/wazo-auth-client.git@master",
+        "xivo@git+https://github.com/wazo-platform/xivo-lib-python.git@master",
+        "cliff>=3.4.0",
+        "requests>=2.25.1",
+        "pyyaml>=5.3.1",
+    ],
 )
