@@ -53,8 +53,8 @@ setup(
         ],
     },
     install_requires=[
-        "wazo-auth-client@git+https://github.com/wazo-platform/wazo-auth-client.git@master",
-        "xivo@git+https://github.com/wazo-platform/xivo-lib-python.git@master",
+        "wazo-auth-client@https://github.com/wazo-platform/wazo-auth-client/archive/master.zip",
+        "xivo@https://github.com/wazo-platform/xivo-lib-python/archive/master.zip",
         "cliff>=3.4.0",
         "requests>=2.25.1",
         "pyyaml>=5.3.1",
