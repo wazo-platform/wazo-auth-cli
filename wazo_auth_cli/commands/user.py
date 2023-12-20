@@ -248,7 +248,6 @@ class UserShow(UserIdentifierMixin, Command):
         uuid = self.get_user_uuid(self.app.client, parsed_args.identifier)
         user = self.app.client.users.get(uuid)
         user['policies'] = self.app.client.users.get_policies(uuid)['items']
-        user['tenants'] = self.app.client.users.get_tenants(uuid)['items']
         user['groups'] = self.app.client.users.get_groups(uuid)['items']
         user['sessions'] = self.app.client.users.get_sessions(uuid)['items']
         self.app.stdout.write(json.dumps(user, indent=True, sort_keys=True) + '\n')
