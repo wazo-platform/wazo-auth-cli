@@ -1,17 +1,13 @@
-# Copyright 2017-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2017-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import json
-import requests
 
+import requests
 from cliff.command import Command
 from cliff.lister import Lister
 
-from ..helpers import (
-    ListBuildingMixin,
-    PolicyIdentifierMixin,
-    TenantIdentifierMixin,
-)
+from ..helpers import ListBuildingMixin, PolicyIdentifierMixin, TenantIdentifierMixin
 
 
 class PolicyCreate(PolicyIdentifierMixin, TenantIdentifierMixin, Command):
