@@ -1,4 +1,4 @@
-# Copyright 2017-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2017-2024 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
@@ -87,6 +87,7 @@ class WazoAuthCLI(App):
                 args['backend'] = self._backend
             token_data = self._client.token.new(**args)
             self._current_token = token_data['token']
+            self._remove_token = True
 
         self._client.set_token(self._current_token)
 
