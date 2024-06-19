@@ -1,4 +1,4 @@
-# Copyright 2019-2021 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2019-2024 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import json
@@ -70,3 +70,30 @@ class SessionShow(Command):
                     json.dumps(session, indent=True, sort_keys=True) + '\n'
                 )
                 break
+
+
+class SessionWipe(Command):
+    "Wipes all user\'s sessions"
+
+    def get_parser(self, *args, **kwargs):
+        parser = super().get_parser(*args, **kwargs)
+        parser.add_argument('identifier', help='user\'s UUID')
+        return parser
+
+    def take_action(self, parsed_args):
+        user_uuid = parsed_args.identifier
+        tenant_uuid = self.app.client.users.get(user_uuid=user_uuid)['tenant_uuid']
+        sessions = self.app.client.sessions.list(tenant_uuid=tenant_uuid)
+
+        sessions = [
+            session
+            for session in sessions['items']
+            if session['user_uuid'] == user_uuid
+        ]
+        for session in sessions:
+            self.app.LOG.debug('Deleting session %s', session['uuid'])
+            self.app.client.sessions.delete(session['uuid'])
+
+        self.app.stdout.write(
+            f'Wiped {len(sessions)} sessions for user {user_uuid}\n',
+        )
