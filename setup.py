@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright 2017-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2017-2024 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from setuptools import find_packages, setup
@@ -38,6 +38,7 @@ setup(
             'session_list = wazo_auth_cli.commands.session:SessionList',
             'session_delete = wazo_auth_cli.commands.session:SessionDelete',
             'session_show = wazo_auth_cli.commands.session:SessionShow',
+            'session_wipe = wazo_auth_cli.commands.session:SessionWipe',
             'tenant_add = wazo_auth_cli.commands.tenant:TenantAdd',
             'tenant_create = wazo_auth_cli.commands.tenant:TenantCreate',
             'tenant_remove = wazo_auth_cli.commands.tenant:TenantRemove',
