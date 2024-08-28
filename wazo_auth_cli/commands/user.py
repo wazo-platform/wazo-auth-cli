@@ -1,12 +1,12 @@
 # Copyright 2017-2023 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import os
 import json
+import os
+from getpass import getpass
 
 from cliff.command import Command
 from cliff.lister import Lister
-from getpass import getpass
 
 from ..helpers import (
     GroupIdentifierMixin,
@@ -248,7 +248,6 @@ class UserShow(UserIdentifierMixin, Command):
         uuid = self.get_user_uuid(self.app.client, parsed_args.identifier)
         user = self.app.client.users.get(uuid)
         user['policies'] = self.app.client.users.get_policies(uuid)['items']
-        user['tenants'] = self.app.client.users.get_tenants(uuid)['items']
         user['groups'] = self.app.client.users.get_groups(uuid)['items']
         user['sessions'] = self.app.client.users.get_sessions(uuid)['items']
         self.app.stdout.write(json.dumps(user, indent=True, sort_keys=True) + '\n')

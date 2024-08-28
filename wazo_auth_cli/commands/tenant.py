@@ -6,7 +6,7 @@ import json
 from cliff.command import Command
 from cliff.lister import Lister
 
-from ..helpers import TenantIdentifierMixin, UserIdentifierMixin, ListBuildingMixin
+from ..helpers import ListBuildingMixin, TenantIdentifierMixin, UserIdentifierMixin
 
 
 class TenantAdd(TenantIdentifierMixin, UserIdentifierMixin, Command):
