@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright 2017-2024 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2017-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -56,8 +56,8 @@ setup(
     install_requires=[
         "wazo-auth-client@https://github.com/wazo-platform/wazo-auth-client/archive/bookworm.zip",
         "xivo@https://github.com/wazo-platform/xivo-lib-python/archive/bookworm.zip",
-        "cliff>=3.4.0",
-        "requests>=2.25.1",
-        "pyyaml>=5.3.1",
+        "cliff>=4.0.0",
+        "pyyaml>=6.0",
+        "requests>=2.28.1",
     ],
 )
