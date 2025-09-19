@@ -5,13 +5,10 @@ RUN python -m venv /opt/venv
 # Activate virtual env
 ENV PATH="/opt/venv/bin:$PATH"
 
-COPY requirements.txt /usr/src/wazo-auth-cli/
 WORKDIR /usr/src/wazo-auth-cli
-RUN pip install -r requirements.txt
-
 COPY setup.py /usr/src/wazo-auth-cli/
 COPY wazo_auth_cli /usr/src/wazo-auth-cli/wazo_auth_cli
-RUN python setup.py install
+RUN pip install .
 
 FROM python:3.11-slim-bookworm AS build-image
 COPY --from=compile-image /opt/venv /opt/venv
