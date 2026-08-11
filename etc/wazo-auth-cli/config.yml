@@ -3,6 +3,5 @@ extra_config_files: '/etc/wazo-auth-cli/conf.d'
 # Connection info to the authentication server
 auth:
   host: localhost
-  port: 9497
-  prefix: null
+  port: 80
   https: false

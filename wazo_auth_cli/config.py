@@ -1,4 +1,4 @@
-# Copyright 2017-2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2017-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
@@ -12,7 +12,7 @@ _APP_NAME = 'wazo-auth-cli'
 _DEFAULT_CONFIG = {
     'config_file': f'/etc/{_APP_NAME}/config.yml',
     'extra_config_files': f'/etc/{_APP_NAME}/conf.d/',
-    'auth': {'host': 'localhost', 'port': 9497, 'prefix': None, 'https': False},
+    'auth': {'host': 'localhost', 'port': 80, 'https': False},
 }
 
 _AUTH_ARGS_TO_FIELDS_MAP = {
